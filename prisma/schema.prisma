@@ -10,14 +10,18 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  // TODO: 转为环境变量
+  // url      = env("DATABASE_URL")
+  url = "postgresql://postgres:password@localhost:5432/"
 }
 
 model UserInfo {
-  id Int @id @default(autoincrement())
-  password String
-  name String
-  active Boolean
+  id        Int     @id @default(autoincrement())
+  password  String
+  name      String
+  active    Boolean
   lastLogin Int
-  email String
+  email     String
+
+  @@index([email])
 }
