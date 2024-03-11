@@ -6,6 +6,8 @@ import { JwtStrategy } from './jwt.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { TenantsModule } from '../tenants/tenants.module';
 import { TenantsService } from '../tenants/tenants.service';
+import { UserModule } from 'src/core/user/user.module';
+import { UserService } from 'src/core/user/user.service';
 
 @Module({
   imports: [
@@ -17,7 +19,8 @@ import { TenantsService } from '../tenants/tenants.service';
       signOptions: { expiresIn: '8h' }, // e.g. 30s, 7d, 24h
     }),
     TenantsModule,
+    UserModule,
   ],
-  providers: [AuthService, JwtStrategy, TenantsService],
+  providers: [AuthService, JwtStrategy, TenantsService, UserService],
 })
 export class AuthModule {}

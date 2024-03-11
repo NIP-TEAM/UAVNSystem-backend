@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
-  getUserInfo({ email, password }: CreateUserDto) {
-    // 扩展数据库查询
-    return {
-      id: 1,
-      name: 'test',
-      active: true,
-      avatar: '',
-      lastLogIn: new Date().getTime(),
-    };
+  constructor(private prisma: PrismaService) {}
+
+  async findOne(email: string) {
+    return await this.prisma.userInfo.findFirst({ where: { email } });
+  }
+
+  async updateOne(id: number, data: UpdateUserDto) {
+    return await this.prisma.userInfo.update({ where: { id }, data });
   }
 }

@@ -63,7 +63,7 @@ export class TenantsService {
           password: hashedPassword,
           name,
           active: false,
-          lastLogin: 0,
+          lastLogin: '0',
         },
       });
     }
