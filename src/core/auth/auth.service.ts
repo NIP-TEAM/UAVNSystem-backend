@@ -6,6 +6,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { AuthEntity } from 'src/core/user/entities/auth.entity';
 import { UserService } from 'src/core/user/user.service';
+import LoginText from 'src/language/core/auth.json';
 import * as bcrypt from 'bcryptjs';
 
 @Injectable()
@@ -19,18 +20,19 @@ export class AuthService {
     const user = await this.userService.findOne(email);
 
     if (!user) {
-      throw new NotFoundException(`No user found for email: ${email}`);
+      throw new NotFoundException({
+        en: LoginText.userNotFound.en + ' ' + email,
+        zh: LoginText.userNotFound.zh + ' ' + email,
+      });
     }
 
     if (!user.password) {
-      throw new UnauthorizedException(
-        'Please reset your password or enter from onboarding.',
-      );
+      throw new UnauthorizedException(LoginText.passwordError);
     }
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid password');
+      throw new UnauthorizedException(LoginText.invalidPassword);
     }
 
     const token = this.jwtService.sign(
