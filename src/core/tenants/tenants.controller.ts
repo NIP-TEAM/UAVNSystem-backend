@@ -2,8 +2,8 @@ import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { TenantsService } from './tenants.service';
 import { AuthService } from '../auth/auth.service';
 import { ToolsService } from 'src/utils/tools.service';
-import { RegisterDto } from '../core/user/dto/register.dto';
-import { LoginUserDto } from '../core/user/dto/login-user.dto';
+import { RegisterDto } from '../user/dto/register.dto';
+import { LoginUserDto } from '../user/dto/login-user.dto';
 
 @Controller('tenants')
 export class TenantsController {

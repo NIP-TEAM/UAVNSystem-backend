@@ -30,4 +30,9 @@ export class CreateTenantDto {
   @MaxLength(150)
   @ApiProperty({ required: true })
   avatar: string;
+
+  @IsString()
+  @MaxLength(150)
+  @ApiProperty({ required: true })
+  lastLogin: string;
 }
