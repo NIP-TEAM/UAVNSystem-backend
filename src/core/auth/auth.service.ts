@@ -33,7 +33,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid password');
     }
 
-    const access = this.jwtService.sign(
+    const token = this.jwtService.sign(
       { userId: user.id },
       { secret: process.env.JWT_SECRET_KEY, expiresIn: '8h' },
     );
@@ -44,7 +44,7 @@ export class AuthService {
     });
 
     const loginUser = {
-      access,
+      token,
       ...userLatestInfo,
     };
 
