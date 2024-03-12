@@ -6,7 +6,6 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { AuthEntity } from 'src/core/user/entities/auth.entity';
 import { UserService } from 'src/core/user/user.service';
-import LoginText from 'src/language/core/auth.json';
 import * as bcrypt from 'bcryptjs';
 
 @Injectable()
@@ -20,19 +19,31 @@ export class AuthService {
     const user = await this.userService.findOne(email);
 
     if (!user) {
-      throw new NotFoundException({
-        en: LoginText.userNotFound.en + ' ' + email,
-        zh: LoginText.userNotFound.zh + ' ' + email,
-      });
+      throw new NotFoundException(
+        JSON.stringify({
+          en: 'No user found for email:' + ' ' + email,
+          zh: '没有找到该用户, 邮箱信息:' + ' ' + email,
+        }),
+      );
     }
 
     if (!user.password) {
-      throw new UnauthorizedException(LoginText.passwordError);
+      throw new UnauthorizedException(
+        JSON.stringify({
+          en: 'Please reset your password or enter from onboarding.',
+          zh: '密码有误，或在下方重置密码!',
+        }),
+      );
     }
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      throw new UnauthorizedException(LoginText.invalidPassword);
+      throw new UnauthorizedException(
+        JSON.stringify({
+          en: 'Invalid password',
+          zh: '密码不符合规则',
+        }),
+      );
     }
 
     const token = this.jwtService.sign(
