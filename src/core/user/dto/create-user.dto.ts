@@ -31,7 +31,8 @@ export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(150)
-  @ApiProperty({ required: true })
+  @IsOptional()
+  @ApiProperty({ required: false })
   avatar: string;
 
   @IsBoolean()

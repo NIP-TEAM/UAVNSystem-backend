@@ -10,6 +10,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { ToolsService } from './utils/tools.service';
 import { AuthService } from './core/auth/auth.service';
 import { UserService } from './core/user/user.service';
+import { EmailModule } from './core/email/email.module';
 
 @Module({
   controllers: [AppController, TenantsController],
@@ -20,6 +21,6 @@ import { UserService } from './core/user/user.service';
     AuthService,
     UserService,
   ],
-  imports: [PlaneModule, AuthModule, TenantsModule, PrismaModule],
+  imports: [PlaneModule, AuthModule, TenantsModule, PrismaModule, EmailModule],
 })
 export class AppModule {}
