@@ -1,15 +1,26 @@
 import { Injectable } from '@nestjs/common';
-import { createTransport } from 'nodemailer';
-import EMAIL from './config';
+import { MailerService } from '@nestjs-modules/mailer';
+
+export enum Subject {
+  VerifyCode = '验证码邮件(Verification Code Email)',
+}
 
 @Injectable()
 export class EmailService {
-  private transporter = null;
-  constructor() {
-    this.transporter = createTransport(EMAIL);
-  }
+  constructor(private readonly mailerService: MailerService) {}
 
-  sendEmail(email: string, text: string, subject: string, html: unknown) {
-    
+  async sendEmail(
+    email: string,
+    subject: Subject,
+    text?: string,
+    template?: string,
+    context?: { [key: string]: string | number },
+  ) {
+    await this.mailerService.sendMail({
+      to: email,
+      subject,
+      ...(text ? { text } : {}),
+      ...(template ? { template, context } : {}),
+    });
   }
 }

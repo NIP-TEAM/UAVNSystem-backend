@@ -7,8 +7,8 @@ import { CreateTenantDto } from './dto/create-tenant.dto';
 @Injectable()
 export class TenantsService {
   constructor(
-    private prisma: PrismaService,
-    private jwtService: JwtService,
+    private readonly prisma: PrismaService,
+    private readonly jwtService: JwtService,
   ) {}
 
   findOne(id: number) {

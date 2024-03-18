@@ -4,7 +4,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async findOne(email: string) {
     return await this.prisma.userInfo.findFirst({ where: { email } });

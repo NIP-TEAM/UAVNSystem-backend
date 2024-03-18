@@ -1,0 +1,29 @@
+<html lang='en'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <title>Email Verification Code</title>
+  </head>
+  <body>
+    <h1><strong>UAVN System</strong></h1>
+    <div class='article'>
+      <h2>您的验证码</h2>
+      <p>亲爱的 {{name}}: </p>
+      <p>您的验证码是: <strong>{{verificationCode}}</strong></p>
+      <p>请使用验证码以验证您的邮箱地址</p>
+      <p>如果您没有进行过注册操作，请忽略该邮件</p>
+      <p>感谢！</p>
+    </div>
+    <div class='article'>
+      <h2>Verification Code</h2>
+      <p>Dear {{name}},</p>
+      <p>Your verification code is: <strong>{{verificationCode}}</strong></p>
+      <p>Please use this code to verify your email address.</p>
+      <p>If you have not registered, please ignore this email.</p>
+      <p>Thank you!</p>
+    </div>
+  </body>
+  <style>
+    .article { margin: 3rem 0; }
+  </style>
+</html>
