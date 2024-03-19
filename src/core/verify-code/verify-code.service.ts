@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { EmailService, Subject } from '../email/email.service';
 import { getHashPassword } from 'src/utils/utils';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -43,5 +43,23 @@ export class VerifyCodeService {
       verificationCode: randomCode,
     });
     return 'success';
+  }
+
+  async checkVerifyCode(email: string, code: number) {
+    const verifyCode = await this.prisma.verifyCode.findFirst({
+      where: {
+        email,
+      },
+    });
+    if (!verifyCode)
+      throw new NotFoundException(
+        JSON.stringify({
+          en: 'The email does not contain any verification code information!',
+          zh: '该邮箱不存在验证码信息！',
+        }),
+      );
+    const { code: storedCode, createTime } = verifyCode;
+    const nowTime = new Date()
+    // if (newDate())
   }
 }
