@@ -14,21 +14,30 @@ export class VerifyCodeService {
     const randomCode = Math.floor(Math.random() * 1000000)
       .toString()
       .padStart(6, '0');
-    const verifyCode = await getHashPassword(randomCode);
-    await this.prisma.verifyCode.create({
-      data: {
+    const newCode = await getHashPassword(randomCode);
+    const verifyCode = await this.prisma.verifyCode.findFirst({
+      where: {
         email,
-        code: verifyCode,
-        createTime: new Date().getTime().toString(),
       },
     });
-    setTimeout(async () => {
-      await this.prisma.verifyCode.delete({
-        where: {
+    if (verifyCode) {
+      await this.prisma.verifyCode.update({
+        where: { email },
+        data: {
           email,
+          code: newCode,
+          createTime: new Date().getTime().toString(),
         },
       });
-    }, 30000);
+    } else {
+      await this.prisma.verifyCode.create({
+        data: {
+          email,
+          code: newCode,
+          createTime: new Date().getTime().toString(),
+        },
+      });
+    }
     await this.mailServer.sendEmail(email, Subject.VerifyCode, 'verifyCode', {
       name: email,
       verificationCode: randomCode,

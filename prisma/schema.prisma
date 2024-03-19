@@ -19,7 +19,7 @@ model UserInfo {
 }
 
 model VerifyCode {
-  email      String @unique
+  email      String @id @unique
   code       String
   createTime String
 }

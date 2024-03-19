@@ -11,10 +11,8 @@ import { ToolsService } from './utils/tools.service';
 import { AuthService } from './core/auth/auth.service';
 import { UserService } from './core/user/user.service';
 import { EmailModule } from './core/email/email.module';
-import { MailerModule } from '@nestjs-modules/mailer';
 import { VerifyCodeController } from './core/verify-code/verify-code.controller';
 import { VerifyCodeModule } from './core/verify-code/verify-code.module';
-import EMAIL from './core/email/config';
 import { VerifyCodeService } from './core/verify-code/verify-code.service';
 import { EmailService } from './core/email/email.service';
 
@@ -35,7 +33,6 @@ import { EmailService } from './core/email/email.service';
     TenantsModule,
     PrismaModule,
     EmailModule,
-    MailerModule.forRoot(EMAIL),
     VerifyCodeModule,
   ],
 })

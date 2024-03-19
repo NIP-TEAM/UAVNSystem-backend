@@ -3,7 +3,7 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 export enum Subject {
-  VerifyCode = '验证码邮件(Verification Code Email)',
+  VerifyCode = '验证码邮件 Verification Code Email',
 }
 
 @Injectable()
