@@ -6,7 +6,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { AuthEntity } from 'src/core/user/entities/auth.entity';
 import { UserService } from 'src/core/user/user.service';
-import * as bcrypt from 'bcryptjs';
+import { hashIsEqual } from 'src/utils/utils';
 
 @Injectable()
 export class AuthService {
@@ -35,7 +35,7 @@ export class AuthService {
         }),
       );
     }
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = await hashIsEqual(password, user.password);
 
     if (!isPasswordValid) {
       throw new UnauthorizedException(

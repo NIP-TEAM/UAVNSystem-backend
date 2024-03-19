@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcryptjs';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateTenantDto } from './dto/create-tenant.dto';
+import { getHashPassword } from 'src/utils/utils';
 
 @Injectable()
 export class TenantsService {
@@ -44,10 +44,7 @@ export class TenantsService {
     else {
       // generate password
       const radomPassword = password || this.generateRandomPassword();
-      const hashedPassword = await bcrypt.hash(
-        radomPassword,
-        this.roundsOfHashing,
-      );
+      const hashedPassword = await getHashPassword(radomPassword);
 
       //   const merchat = await this.prisma.merchant.create({
       //     data: {

@@ -17,3 +17,9 @@ model UserInfo {
 
   @@index([email])
 }
+
+model VerifyCode {
+  email      String @unique
+  code       String
+  createTime String
+}

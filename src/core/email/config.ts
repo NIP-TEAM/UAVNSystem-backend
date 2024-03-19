@@ -7,7 +7,7 @@ export default {
     port: 465,
     secure: true,
     auth: {
-      user: 'z2530056984@qq.com',
+      user: 'z2530056984@163.com',
       pass: 'TZSRWOQCUXJGXYNF',
     },
     defaults: {
