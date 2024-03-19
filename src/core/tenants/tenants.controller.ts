@@ -13,10 +13,10 @@ export class TenantsController {
     private readonly toolsService: ToolsService,
   ) {}
 
-  //   @Post()
-  //   create(@Body() createTenantDto: CreateTenantDto) {
-  //     return this.tenantsService.create(createTenantDto);
-  //   }
+  // @Post()
+  // create(@Body() createTenantDto: CreateTenantDto) {
+  //   return this.tenantsService.create(createTenantDto);
+  // }
 
   //   @Get()
   //   findAll() {

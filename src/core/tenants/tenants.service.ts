@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateTenantDto } from './dto/create-tenant.dto';
 import { getHashPassword } from 'src/utils/utils';
+import { RegisterDto } from '../user/dto/register.dto';
 
 @Injectable()
 export class TenantsService {
@@ -34,7 +34,7 @@ export class TenantsService {
     return password;
   }
 
-  async register({ email, password, name }: CreateTenantDto) {
+  async register({ email, password, name }: RegisterDto) {
     const isExist = await this.prisma.userInfo.findFirst({
       where: {
         email: email.toLowerCase(),

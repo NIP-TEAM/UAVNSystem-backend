@@ -27,7 +27,7 @@ export class VerifyCodeService {
       .toString()
       .padStart(6, '0');
     const newCode = await getHashPassword(randomCode);
-    const verifyCode = this.findOne(email);
+    const verifyCode = await this.findOne(email);
     if (verifyCode) {
       await this.prisma.verifyCode.update({
         where: { email },
