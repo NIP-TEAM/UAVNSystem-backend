@@ -53,7 +53,7 @@ export class VerifyCodeService {
     return 'success';
   }
 
-  async checkVerifyCode(email: string, code: number) {
+  async checkVerifyCode(email: string, code: string) {
     const verifyCode = await this.findOne(email);
 
     if (!verifyCode)
@@ -65,7 +65,7 @@ export class VerifyCodeService {
       );
     const { code: storedCode, createTime: createTimeString } = verifyCode;
     if (new Date().getTime() - Number(createTimeString) <= 5 * 60 * 1000) {
-      if (!(await hashIsEqual(code.toString(), storedCode)))
+      if (!(await hashIsEqual(code, storedCode)))
         throw new ForbiddenException(
           JSON.stringify({
             en: 'Incorrect verification code!',

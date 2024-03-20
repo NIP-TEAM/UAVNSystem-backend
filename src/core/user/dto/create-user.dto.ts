@@ -1,47 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsBoolean,
-  IsEmail,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  MaxLength,
-  MinLength,
-} from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
+import { LoginUserDto } from './login-user.dto';
 
-export class CreateUserDto {
-  @IsEmail()
-  @IsNotEmpty()
-  @MinLength(5)
-  @ApiProperty({ required: true })
-  email: string;
-
+export class CreateUserDto extends LoginUserDto {
   @IsString()
   @IsNotEmpty()
-  @MaxLength(150)
-  @ApiProperty({ required: true })
-  password: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(150)
-  @ApiProperty({ required: true })
-  name: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(150)
-  @IsOptional()
-  @ApiProperty({ required: false })
+  @ApiProperty()
   avatar: string;
 
-  @IsBoolean()
-  @IsOptional()
-  @ApiProperty({ required: false })
-  active: boolean;
-
   @IsString()
-  @IsOptional()
-  @ApiProperty({ required: false })
-  lastLogin: string;
+  @IsNotEmpty()
+  @ApiProperty()
+  name: string;
 }

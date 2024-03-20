@@ -6,5 +6,5 @@ export class VerifyCodeDto {
   @IsNotEmpty()
   @MinLength(5)
   @ApiProperty({ required: true })
-  email: string;
+  email?: string;
 }

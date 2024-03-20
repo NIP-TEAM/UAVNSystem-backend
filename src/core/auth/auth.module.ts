@@ -8,6 +8,10 @@ import { TenantsModule } from '../tenants/tenants.module';
 import { TenantsService } from '../tenants/tenants.service';
 import { UserModule } from 'src/core/user/user.module';
 import { UserService } from 'src/core/user/user.service';
+import { VerifyCodeService } from '../verify-code/verify-code.service';
+import { VerifyCodeModule } from '../verify-code/verify-code.module';
+import { EmailService } from '../email/email.service';
+import { EmailModule } from '../email/email.module';
 
 @Module({
   imports: [
@@ -20,7 +24,16 @@ import { UserService } from 'src/core/user/user.service';
     }),
     TenantsModule,
     UserModule,
+    VerifyCodeModule,
+    EmailModule,
   ],
-  providers: [AuthService, JwtStrategy, TenantsService, UserService],
+  providers: [
+    AuthService,
+    JwtStrategy,
+    TenantsService,
+    UserService,
+    VerifyCodeService,
+    EmailService,
+  ],
 })
 export class AuthModule {}

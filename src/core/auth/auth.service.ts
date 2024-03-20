@@ -16,7 +16,7 @@ export class AuthService {
   ) {}
 
   async login(email: string, password: string): Promise<AuthEntity> {
-    const user = await this.userService.findOne(email);
+    const user = await this.userService.findOneByEmail(email);
 
     if (!user) {
       throw new NotFoundException(

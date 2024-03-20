@@ -2,25 +2,23 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { getHashPassword } from 'src/utils/utils';
-import { RegisterDto } from '../user/dto/register.dto';
+import { VerifyCodeService } from '../verify-code/verify-code.service';
+import { UserService } from '../user/user.service';
+import { RegisterUserDto } from '../user/dto/register-user.dto';
 
 @Injectable()
 export class TenantsService {
   constructor(
-    private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
+    private readonly verifyCodeService: VerifyCodeService,
+    private readonly userService: UserService,
   ) {}
 
   findOne(id: number) {
-    return this.prisma.userInfo.findFirst({
-      where: {
-        id: id,
-      },
-    });
+    return this.userService.findOneById(id);
   }
 
-  private roundsOfHashing = 10;
-  generateRandomPassword() {
+  private generateRandomPassword() {
     const characters =
       'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
     const passwordLength = Math.floor(Math.random() * 11) + 6;
@@ -34,34 +32,38 @@ export class TenantsService {
     return password;
   }
 
-  async register({ email, password, name }: RegisterDto) {
-    const isExist = await this.prisma.userInfo.findFirst({
-      where: {
-        email: email.toLowerCase(),
-      },
-    });
-    if (isExist) throw new BadRequestException('this email is existed');
+  async register({
+    email,
+    password,
+    name,
+    verifyCode,
+    avatar,
+  }: RegisterUserDto) {
+    const isExist = await this.userService.findOneByEmail(email);
+    if (isExist)
+      throw new BadRequestException(
+        JSON.stringify({
+          en: 'This email is existed!',
+          zh: '此邮箱已被注册!',
+        }),
+      );
     else {
+      // check verifyCode
+      if (!(await this.verifyCodeService.checkVerifyCode(email, verifyCode)))
+        throw new BadRequestException(
+          JSON.stringify({
+            en: 'Error varification code!',
+            zh: '验证码错误!',
+          }),
+        );
       // generate password
       const radomPassword = password || this.generateRandomPassword();
       const hashedPassword = await getHashPassword(radomPassword);
-
-      //   const merchat = await this.prisma.merchant.create({
-      //     data: {
-      //       email,
-      //       name: first_name + last_name,
-      //       phone: '111',
-      //     },
-      //   });
-      //create account
-      await this.prisma.userInfo.create({
-        data: {
-          email: email.toLowerCase(),
-          password: hashedPassword,
-          name,
-          active: false,
-          lastLogin: '0',
-        },
+      await this.userService.createOne({
+        email,
+        password: hashedPassword,
+        avatar,
+        name,
       });
     }
   }

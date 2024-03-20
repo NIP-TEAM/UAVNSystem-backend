@@ -2,8 +2,8 @@ import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { TenantsService } from './tenants.service';
 import { AuthService } from '../auth/auth.service';
 import { ToolsService } from 'src/utils/tools.service';
-import { RegisterDto } from '../user/dto/register.dto';
 import { LoginUserDto } from '../user/dto/login-user.dto';
+import { RegisterUserDto } from '../user/dto/register-user.dto';
 
 @Controller('tenants')
 export class TenantsController {
@@ -42,7 +42,7 @@ export class TenantsController {
     return this.authService.login(email, password);
   }
   @Post('register')
-  register(@Body() registerInfo: RegisterDto) {
+  register(@Body() registerInfo: RegisterUserDto) {
     return this.tenantsService.register(registerInfo);
   }
 
