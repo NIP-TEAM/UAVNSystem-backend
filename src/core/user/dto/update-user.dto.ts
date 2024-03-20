@@ -5,11 +5,6 @@ import { IsString, IsBoolean, IsOptional } from 'class-validator';
 export class UpdateUserDto extends PartialType(LoginUserDto) {
   @IsString()
   @IsOptional()
-  @ApiProperty({ required: false })
-  avatar?: string;
-
-  @IsString()
-  @IsOptional()
   @ApiProperty()
   lastLogin?: string;
 

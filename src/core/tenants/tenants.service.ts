@@ -1,6 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from 'src/prisma/prisma.service';
 import { getHashPassword } from 'src/utils/utils';
 import { VerifyCodeService } from '../verify-code/verify-code.service';
 import { UserService } from '../user/user.service';
@@ -32,13 +31,7 @@ export class TenantsService {
     return password;
   }
 
-  async register({
-    email,
-    password,
-    name,
-    verifyCode,
-    avatar,
-  }: RegisterUserDto) {
+  async register({ email, password, name, verifyCode }: RegisterUserDto) {
     const isExist = await this.userService.findOneByEmail(email);
     if (isExist)
       throw new BadRequestException(
@@ -62,7 +55,6 @@ export class TenantsService {
       await this.userService.createOne({
         email,
         password: hashedPassword,
-        avatar,
         name,
       });
     }

@@ -6,10 +6,5 @@ export class CreateUserDto extends LoginUserDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty()
-  avatar: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty()
   name: string;
 }
