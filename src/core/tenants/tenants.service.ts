@@ -1,9 +1,16 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { getHashPassword } from 'src/utils/utils';
 import { VerifyCodeService } from '../verify-code/verify-code.service';
 import { UserService } from '../user/user.service';
 import { RegisterUserDto } from '../user/dto/register-user.dto';
+import { ForgetUserDto } from '../user/dto/forget-user.dto';
+import { EmailService } from '../email/email.service';
+import { Subject } from '../email/config';
 
 @Injectable()
 export class TenantsService {
@@ -11,6 +18,7 @@ export class TenantsService {
     private readonly jwtService: JwtService,
     private readonly verifyCodeService: VerifyCodeService,
     private readonly userService: UserService,
+    private readonly emailService: EmailService,
   ) {}
 
   findOne(id: number) {
@@ -19,8 +27,8 @@ export class TenantsService {
 
   private generateRandomPassword() {
     const characters =
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
-    const passwordLength = Math.floor(Math.random() * 11) + 6;
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const passwordLength = Math.floor(Math.random() * 11) + 8;
     let password = '';
 
     for (let i = 0; i < passwordLength; i++) {
@@ -58,5 +66,30 @@ export class TenantsService {
         name,
       });
     }
+  }
+
+  async sendPassword({ email, verifyCode }: ForgetUserDto) {
+    const isExist = await this.userService.findOneByEmail(email);
+    if (!isExist)
+      throw new NotFoundException(
+        JSON.stringify({
+          en: 'Account information not found!',
+          zh: '未找到账户信息!',
+        }),
+      );
+
+    if (await this.verifyCodeService.checkVerifyCode(email, verifyCode)) {
+      const newPassword = this.generateRandomPassword();
+      await this.emailService.sendEmail(
+        email,
+        Subject.ForgetPassword,
+        'forgetPassword',
+        { name: email, password: newPassword },
+      );
+      await this.userService.updateOne(+isExist.id, {
+        password: await getHashPassword(newPassword),
+      });
+    }
+    return 'success';
   }
 }

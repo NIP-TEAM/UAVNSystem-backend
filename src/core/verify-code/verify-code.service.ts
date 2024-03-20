@@ -3,9 +3,10 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { EmailService, Subject } from '../email/email.service';
+import { EmailService } from '../email/email.service';
 import { getHashPassword, hashIsEqual } from 'src/utils/utils';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { Subject } from '../email/config';
 
 @Injectable()
 export class VerifyCodeService {

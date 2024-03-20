@@ -4,6 +4,7 @@ import { AuthService } from '../auth/auth.service';
 import { ToolsService } from 'src/utils/tools.service';
 import { LoginUserDto } from '../user/dto/login-user.dto';
 import { RegisterUserDto } from '../user/dto/register-user.dto';
+import { ForgetUserDto } from '../user/dto/forget-user.dto';
 
 @Controller('tenants')
 export class TenantsController {
@@ -49,5 +50,10 @@ export class TenantsController {
   @Post('captcha')
   getCaptcha() {
     return this.toolsService.captche();
+  }
+
+  @Post('forget')
+  forgetPassword(@Body() forgetInfo: ForgetUserDto) {
+    this.tenantsService.sendPassword(forgetInfo);
   }
 }

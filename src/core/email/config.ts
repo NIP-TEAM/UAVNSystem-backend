@@ -4,7 +4,7 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 const fromUser = process.env.EMAIL_USER;
 const passport = process.env.EMAIL_TOKEN;
 
-const EMAILCONFIG: MailerOptions = {
+export const EMAILCONFIG: MailerOptions = {
   transport: {
     host: 'smtp.163.com',
     port: 465,
@@ -24,4 +24,7 @@ const EMAILCONFIG: MailerOptions = {
   defaults: { from: `"No Reply" <${fromUser}>` },
 };
 
-export default EMAILCONFIG;
+export enum Subject {
+  VerifyCode = '验证码邮件 Verification Code Email',
+  ForgetPassword = '找回密码邮件 Password Recovery Email',
+}

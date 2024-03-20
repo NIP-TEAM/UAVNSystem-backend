@@ -58,7 +58,7 @@ export class AuthService {
 
     const loginUser = {
       token,
-      ...userLatestInfo,
+      userInfo: userLatestInfo,
     };
 
     return new AuthEntity(loginUser);
