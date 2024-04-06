@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  binaryTargets = ["darwin-arm64"]
 }
 
 datasource db {
@@ -8,14 +9,34 @@ datasource db {
 }
 
 model UserInfo {
-  id        Int     @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   password  String
   name      String
   active    Boolean
   lastLogin String
   email     String
+  merchant  Int       @default(1)
+  networks  Network[]
 
   @@index([email])
+}
+
+model Network {
+  id         Int      @id @default(autoincrement())
+  name       String   @db.VarChar(255)
+  status     Int
+  createAt   String   @db.VarChar(255)
+  creator    UserInfo @relation(fields: [userInfoId], references: [id])
+  userInfoId Int
+  lastEdit   String   @db.VarChar(255)
+  uavs       Uav[]
+}
+
+model Uav {
+  id          Int     @id @default(autoincrement())
+  name        String  @db.VarChar(255)
+  networkInfo Network @relation(fields: [networkId], references: [id])
+  networkId   Int
 }
 
 model VerifyCode {
