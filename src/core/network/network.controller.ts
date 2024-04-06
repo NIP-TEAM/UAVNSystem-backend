@@ -13,21 +13,22 @@ import { NetworkService } from './network.service';
 import { CreateNetworkDto } from './dto/create-network.dto';
 import { UpdateNetworkDto } from './dto/update-network.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { JwtAuthReq } from 'src/utils/types';
 
 @Controller('network')
 export class NetworkController {
   constructor(private readonly networkService: NetworkService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() createNetworkDto: CreateNetworkDto) {
-    return this.networkService.create(createNetworkDto);
+  create(@Req() req: JwtAuthReq, @Body() createNetworkDto: CreateNetworkDto) {
+    return this.networkService.create(req.user.tenant.id, createNetworkDto);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  findAll(@Req() req: any) {
-    console.log(req)
-    return this.networkService.findAll();
+  findAll(@Req() req: JwtAuthReq) {
+    return this.networkService.findAll(req.user.tenant.merchantId);
   }
 
   @Get(':id')

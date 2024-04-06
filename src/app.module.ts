@@ -15,6 +15,7 @@ import { VerifyCodeController } from './core/verify-code/verify-code.controller'
 import { VerifyCodeModule } from './core/verify-code/verify-code.module';
 import { VerifyCodeService } from './core/verify-code/verify-code.service';
 import { EmailService } from './core/email/email.service';
+import { NetworkModule } from './core/network/network.module';
 
 @Module({
   controllers: [AppController, TenantsController, VerifyCodeController],
@@ -34,6 +35,7 @@ import { EmailService } from './core/email/email.service';
     PrismaModule,
     EmailModule,
     VerifyCodeModule,
+    NetworkModule,
   ],
 })
 export class AppModule {}
