@@ -6,3 +6,8 @@ export interface JwtAuthReq {
   };
   [key: string | number | symbol]: unknown;
 }
+
+export interface BasicPagination {
+  current: number;
+  pageSize: number;
+}
