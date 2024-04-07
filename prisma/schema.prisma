@@ -23,7 +23,7 @@ model UserInfo {
 model Network {
   id         Int      @id @default(autoincrement())
   name       String   @db.VarChar(255)
-  status     Int
+  status     Int      @default(1)
   createAt   String   @db.VarChar(255)
   creator    UserInfo @relation(fields: [userInfoId], references: [id])
   userInfoId Int
