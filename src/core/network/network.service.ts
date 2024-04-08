@@ -38,11 +38,12 @@ export class NetworkService {
         },
       ],
     };
-    const [email, total] = await Promise.all([
+    const [data, total] = await Promise.all([
       this.prisma.network.findMany({
         where,
         include: {
           creator: true,
+          uavs: true,
         },
         skip: (current - 1) * pageSize,
         take: +pageSize,
@@ -53,7 +54,14 @@ export class NetworkService {
     ]);
 
     return {
-      data: email,
+      data: data.map(({ uavs, creator: { id, name }, ...rest }) => ({
+        ...rest,
+        uavCount: uavs.length,
+        creator: {
+          id,
+          name,
+        },
+      })),
       meta: {
         pagination: {
           total,

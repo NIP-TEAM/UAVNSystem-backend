@@ -50,7 +50,7 @@ export class NetworkController {
 
   @UseGuards(JwtAuthGuard)
   @Delete()
-  remove(@Query() removeDto: RemoveNetworkDto) {
+  remove(@Body() removeDto: RemoveNetworkDto) {
     return this.networkService.remove(removeDto);
   }
 }
