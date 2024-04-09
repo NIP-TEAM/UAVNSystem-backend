@@ -21,6 +21,10 @@ export class TenantsService {
     private readonly emailService: EmailService,
   ) {}
 
+  findAll(merchantId: number) {
+    return this.userService.findAll(merchantId);
+  }
+
   findOne(id: number) {
     return this.userService.findOneById(id);
   }
