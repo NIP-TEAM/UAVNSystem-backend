@@ -1,7 +1,7 @@
 import { IsObject, IsString } from 'class-validator';
 import { BasicPagination } from 'src/utils/types';
 
-export class FindNetworkDto {
+export class GetNetworkDto {
   @IsObject()
   pagination: BasicPagination;
 

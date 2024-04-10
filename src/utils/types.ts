@@ -11,3 +11,5 @@ export interface BasicPagination {
   current: number;
   pageSize: number;
 }
+
+export type BasicSorter = Record<string, 'asc' | 'desc'>;

@@ -3,8 +3,9 @@ import { CreateNetworkDto } from './dto/create-network.dto';
 import { UpdateNetworkDto } from './dto/update-network.dto';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { FindNetworkDto } from './dto/find-network.dto';
+import { GetNetworkDto } from './dto/get-network.dto';
 import { RemoveNetworkDto } from './dto/remove-network.dto';
+import { formateFilter, formateSearchKey } from './utils';
 
 @Injectable()
 export class NetworkService {
@@ -29,13 +30,20 @@ export class NetworkService {
 
   async findAll(
     merchantId: number,
-    { pagination: { current, pageSize }, filter }: FindNetworkDto,
+    { pagination: { current, pageSize }, filter }: GetNetworkDto,
   ) {
+    const {
+      searchKey = '',
+      filters = {},
+      sorter = {},
+    } = JSON.parse(filter || '{}');
     const where: Prisma.NetworkWhereInput = {
       AND: [
         {
           merchantId,
         },
+        ...(formateFilter(filters) as Prisma.NetworkWhereInput[]),
+        formateSearchKey(searchKey) as Prisma.NetworkWhereInput,
       ],
     };
     const [data, total] = await Promise.all([
@@ -47,6 +55,7 @@ export class NetworkService {
         },
         skip: (current - 1) * pageSize,
         take: +pageSize,
+        orderBy: sorter,
       }),
       this.prisma.network.count({
         where,
