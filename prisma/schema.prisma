@@ -33,10 +33,14 @@ model Network {
 }
 
 model Uav {
-  id          Int     @id @default(autoincrement())
-  name        String  @db.VarChar(255)
-  networkInfo Network @relation(fields: [networkId], references: [id])
-  networkId   Int
+  id            Int     @id @default(autoincrement())
+  name          String  @db.VarChar(255)
+  networkInfo   Network @relation(fields: [networkId], references: [id])
+  networkId     Int
+  uploadSpeed   Float
+  downloadSpeed Float
+  status        Int     @default(1)
+  merchantId    Int     @default(1)
 }
 
 model VerifyCode {
