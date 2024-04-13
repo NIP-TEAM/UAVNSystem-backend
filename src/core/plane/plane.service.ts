@@ -4,39 +4,46 @@ import { GetNetworkDto } from '../network/dto/get-network.dto';
 import { Prisma } from '@prisma/client';
 import { omit } from 'lodash';
 import { CreateUavDto } from './dto/create-uav.dto';
-
-// export type UavDataType = {
-//     id: string;
-//     name: string;
-//     uploadSpeed: number;
-//     downloadSpeed: number;
-//     netWorkId: number;
-//   }
+import { formateFilter, formateSearchKey } from './utils';
 
 @Injectable()
 export class PlaneService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createOne(merchantId: number, data: CreateUavDto) {
-    
+  async create(merchantId: number, uavs: CreateUavDto[]) {
+    await Promise.all(
+      uavs.map(({ name, networkId }, index) =>
+        this.prisma.uav.create({
+          data: {
+            name: name || `network${networkId}uav${index}`,
+            createAt: new Date().getTime().toString(),
+            networkId,
+            merchantId,
+          },
+        }),
+      ),
+    );
+    return 'success';
   }
 
   async findAll(
     merchantId: number,
     { pagination: { current, pageSize }, filter }: GetNetworkDto,
   ) {
-    const where: Prisma.UavWhereInput = {
-      AND: [
-        {
-          merchantId,
-        },
-      ],
-    };
     const {
       searchKey = '',
       filters = {},
       sorter = {},
     } = JSON.parse(filter || '{}');
+    const where: Prisma.UavWhereInput = {
+      AND: [
+        {
+          merchantId,
+        },
+        ...formateFilter(filters),
+        formateSearchKey(searchKey),
+      ],
+    };
     const [data, total] = await Promise.all([
       this.prisma.uav.findMany({
         where,
@@ -54,5 +61,13 @@ export class PlaneService {
         pagination: { total },
       },
     };
+  }
+
+  async deleteOne(id: number) {
+    await this.prisma.uav.delete({
+      where: {
+        id,
+      },
+    });
   }
 }

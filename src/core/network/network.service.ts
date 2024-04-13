@@ -89,13 +89,25 @@ export class NetworkService {
     });
   }
 
-  update(id: number, updateNetworkDto: UpdateNetworkDto) {
-    return `This action updates a #${id} network`;
+  async update(id: number, updateNetworkDto: UpdateNetworkDto) {
+    await this.prisma.network.update({
+      where: { id },
+      data: {
+        ...updateNetworkDto,
+        lastEdit: new Date().getTime().toString(),
+      },
+    });
+    return 'success';
   }
 
   async remove({ ids }: RemoveNetworkDto) {
     await Promise.all(
-      ids.map((id) => this.prisma.network.delete({ where: { id } })),
+      ids.map((id) =>
+        Promise.all([
+          this.prisma.network.delete({ where: { id } }),
+          this.prisma.uav.deleteMany({ where: { networkId: id } }),
+        ]),
+      ),
     );
     return 'success';
   }

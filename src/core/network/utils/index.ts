@@ -1,16 +1,26 @@
 export const formateFilter = ({ creator, status }) => {
   const resultFilter = [];
   if (creator) {
-    const { quantifier, content } = creator;
-    if (quantifier === 'is') resultFilter.push({ userInfoId: content });
+    const { quantifier, content = [] } = creator;
+    if (quantifier === 'is')
+      resultFilter.push({
+        OR: content.map((item: number) => ({ userInfoId: item })),
+      });
     else if (quantifier === 'isNot')
-      resultFilter.push({ userInfoId: { not: content } });
+      resultFilter.push({
+        AND: content.map((item: number) => ({ userInfoId: { not: item } })),
+      });
   }
   if (status) {
-    const { quantifier, content } = status;
-    if (quantifier === 'is') resultFilter.push({ status: content });
+    const { quantifier, content = [] } = status;
+    if (quantifier === 'is')
+      resultFilter.push({
+        OR: content.map((item: number) => ({ status: item })),
+      });
     else if (quantifier === 'isNot')
-      resultFilter.push({ status: { not: content } });
+      resultFilter.push({
+        AND: content.map((item: number) => ({ status: { not: item } })),
+      });
   }
   return resultFilter;
 };
