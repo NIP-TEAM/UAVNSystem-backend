@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Post,
   Query,
@@ -20,7 +21,11 @@ export class PlaneController {
   @UseGuards(JwtAuthGuard)
   @Post()
   create(@Req() req: JwtAuthReq, @Body() uavs: CreateUavDto[]) {
-    return this.planeService.create(req.user.tenant.merchantId, uavs);
+    return this.planeService.create(
+      req.user.tenant.merchantId,
+      req.user.tenant.id,
+      uavs,
+    );
   }
 
   @UseGuards(JwtAuthGuard)
@@ -30,5 +35,11 @@ export class PlaneController {
       req.user.tenant.merchantId,
       DataController,
     );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete()
+  delete(@Body() { ids }: { ids: number[] }) {
+    return this.planeService.deleteMany(ids);
   }
 }
