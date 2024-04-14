@@ -3,8 +3,9 @@ import { CreateNetworkDto } from './dto/create-network.dto';
 import { UpdateNetworkDto } from './dto/update-network.dto';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { FindNetworkDto } from './dto/find-network.dto';
+import { GetNetworkDto } from './dto/get-network.dto';
 import { RemoveNetworkDto } from './dto/remove-network.dto';
+import { formateFilter, formateSearchKey } from './utils';
 
 @Injectable()
 export class NetworkService {
@@ -29,23 +30,32 @@ export class NetworkService {
 
   async findAll(
     merchantId: number,
-    { pagination: { current, pageSize }, filter }: FindNetworkDto,
+    { pagination: { current, pageSize }, filter }: GetNetworkDto,
   ) {
+    const {
+      searchKey = '',
+      filters = {},
+      sorter = {},
+    } = JSON.parse(filter || '{}');
     const where: Prisma.NetworkWhereInput = {
       AND: [
         {
           merchantId,
         },
+        ...(formateFilter(filters) as Prisma.NetworkWhereInput[]),
+        formateSearchKey(searchKey) as Prisma.NetworkWhereInput,
       ],
     };
-    const [email, total] = await Promise.all([
+    const [data, total] = await Promise.all([
       this.prisma.network.findMany({
         where,
         include: {
           creator: true,
+          uavs: true,
         },
         skip: (current - 1) * pageSize,
         take: +pageSize,
+        orderBy: sorter,
       }),
       this.prisma.network.count({
         where,
@@ -53,7 +63,14 @@ export class NetworkService {
     ]);
 
     return {
-      data: email,
+      data: data.map(({ uavs, creator: { id, name }, ...rest }) => ({
+        ...rest,
+        uavCount: uavs.length,
+        creator: {
+          id,
+          name,
+        },
+      })),
       meta: {
         pagination: {
           total,
@@ -63,22 +80,38 @@ export class NetworkService {
   }
 
   async findOne(id: number) {
-    return await this.prisma.network.findUniqueOrThrow({
+    const { uavs, ...restField } = await this.prisma.network.findUniqueOrThrow({
       where: { id },
       include: {
         creator: true,
         uavs: true,
       },
     });
+    return {
+      ...restField,
+      uavsCount: uavs?.length || 0,
+    };
   }
 
-  update(id: number, updateNetworkDto: UpdateNetworkDto) {
-    return `This action updates a #${id} network`;
+  async update(id: number, updateNetworkDto: UpdateNetworkDto) {
+    await this.prisma.network.update({
+      where: { id },
+      data: {
+        ...updateNetworkDto,
+        lastEdit: new Date().getTime().toString(),
+      },
+    });
+    return 'success';
   }
 
   async remove({ ids }: RemoveNetworkDto) {
     await Promise.all(
-      ids.map((id) => this.prisma.network.delete({ where: { id } })),
+      ids.map((id) =>
+        Promise.all([
+          this.prisma.network.delete({ where: { id } }),
+          this.prisma.uav.deleteMany({ where: { networkId: id } }),
+        ]),
+      ),
     );
     return 'success';
   }

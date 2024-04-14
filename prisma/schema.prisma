@@ -16,6 +16,7 @@ model UserInfo {
   email      String
   merchantId Int       @default(1)
   networks   Network[]
+  Uav        Uav[]
 
   @@index([email])
 }
@@ -33,10 +34,17 @@ model Network {
 }
 
 model Uav {
-  id          Int     @id @default(autoincrement())
-  name        String  @db.VarChar(255)
-  networkInfo Network @relation(fields: [networkId], references: [id])
-  networkId   Int
+  id            Int      @id @default(autoincrement())
+  name          String   @db.VarChar(255)
+  networkInfo   Network  @relation(fields: [networkId], references: [id])
+  networkId     Int
+  uploadSpeed   Float    @default(0.0)
+  downloadSpeed Float    @default(0.0)
+  status        Int      @default(1)
+  merchantId    Int
+  createAt      String   @db.VarChar(255)
+  creatorInfo   UserInfo @relation(fields: [creatorId], references: [id])
+  creatorId     Int
 }
 
 model VerifyCode {

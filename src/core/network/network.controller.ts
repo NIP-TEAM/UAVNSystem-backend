@@ -15,7 +15,7 @@ import { CreateNetworkDto } from './dto/create-network.dto';
 import { UpdateNetworkDto } from './dto/update-network.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { JwtAuthReq } from 'src/utils/types';
-import { FindNetworkDto } from './dto/find-network.dto';
+import { GetNetworkDto } from './dto/get-network.dto';
 import { RemoveNetworkDto } from './dto/remove-network.dto';
 
 @Controller('network')
@@ -30,7 +30,7 @@ export class NetworkController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  findAll(@Req() req: JwtAuthReq, @Query() DataController: FindNetworkDto) {
+  findAll(@Req() req: JwtAuthReq, @Query() DataController: GetNetworkDto) {
     return this.networkService.findAll(
       req.user.tenant.merchantId,
       DataController,
@@ -50,7 +50,7 @@ export class NetworkController {
 
   @UseGuards(JwtAuthGuard)
   @Delete()
-  remove(@Query() removeDto: RemoveNetworkDto) {
+  remove(@Body() removeDto: RemoveNetworkDto) {
     return this.networkService.remove(removeDto);
   }
 }
