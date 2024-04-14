@@ -10,7 +10,7 @@ import { formateFilter, formateSearchKey } from './utils';
 export class PlaneService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(merchantId: number, userInfoId: number, uavs: CreateUavDto[]) {
+  async create(merchantId: number, creatorId: number, uavs: CreateUavDto[]) {
     await Promise.all(
       uavs.map(({ name, networkId }, index) =>
         this.prisma.uav.create({
@@ -19,7 +19,7 @@ export class PlaneService {
             createAt: new Date().getTime().toString(),
             networkId,
             merchantId,
-            userInfoId,
+            creatorId,
           },
         }),
       ),

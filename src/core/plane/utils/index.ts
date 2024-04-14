@@ -1,7 +1,7 @@
-export const formateFilter = ({ networkId, status }) => {
+export const formateFilter = ({ network, status, creator }) => {
   const resultFilter = [];
-  if (networkId) {
-    const { quantifier, content = [] } = networkId;
+  if (network) {
+    const { quantifier, content = [] } = network;
     if (quantifier === 'is')
       resultFilter.push({
         OR: content.map((item: string) => ({ userInfoId: item })),
@@ -22,6 +22,21 @@ export const formateFilter = ({ networkId, status }) => {
         AND: content.map((item: number) => ({
           status: {
             not: item,
+          },
+        })),
+      });
+  }
+  if (creator) {
+    const { quantifier, content = [] } = creator;
+    if (quantifier === 'is')
+      resultFilter.push({
+        OR: content.map((item: number) => ({ creatorId: +item })),
+      });
+    else if (quantifier === 'isNot')
+      resultFilter.push({
+        AND: content.map((item: number) => ({
+          creatorId: {
+            not: +item,
           },
         })),
       });

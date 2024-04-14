@@ -80,13 +80,17 @@ export class NetworkService {
   }
 
   async findOne(id: number) {
-    return await this.prisma.network.findUniqueOrThrow({
+    const { uavs, ...restField } = await this.prisma.network.findUniqueOrThrow({
       where: { id },
       include: {
         creator: true,
         uavs: true,
       },
     });
+    return {
+      ...restField,
+      uavsCount: uavs?.length || 0,
+    };
   }
 
   async update(id: number, updateNetworkDto: UpdateNetworkDto) {

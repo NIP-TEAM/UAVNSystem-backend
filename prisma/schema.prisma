@@ -43,8 +43,8 @@ model Uav {
   status        Int      @default(1)
   merchantId    Int
   createAt      String   @db.VarChar(255)
-  creatorInfo   UserInfo @relation(fields: [userInfoId], references: [id])
-  userInfoId    Int
+  creatorInfo   UserInfo @relation(fields: [creatorId], references: [id])
+  creatorId     Int
 }
 
 model VerifyCode {
