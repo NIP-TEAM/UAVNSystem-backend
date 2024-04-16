@@ -22,7 +22,7 @@ export class NetworkService {
         createAt: new Date().getTime().toString(),
         lastEdit: new Date().getTime().toString(),
         merchantId,
-        userInfoId: id,
+        creatorId: id,
       },
     });
     return 'success';
@@ -87,6 +87,7 @@ export class NetworkService {
         uavs: true,
       },
     });
+
     return {
       ...restField,
       uavsCount: uavs?.length || 0,

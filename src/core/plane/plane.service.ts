@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { GetNetworkDto } from '../network/dto/get-network.dto';
 import { Prisma } from '@prisma/client';
-import { omit } from 'lodash';
 import { CreateUavDto } from './dto/create-uav.dto';
 import { formateFilter, formateSearchKey } from './utils';
 
@@ -61,7 +60,7 @@ export class PlaneService {
       }),
     ]);
     return {
-      data: data.map((item) => omit(item, 'merchantId')),
+      data,
       meta: {
         pagination: { total },
       },
