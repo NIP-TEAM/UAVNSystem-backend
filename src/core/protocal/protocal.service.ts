@@ -44,4 +44,11 @@ export class ProtocalService {
       where: { id },
     });
   }
+
+  async deleteOne(id: number) {
+    await this.prisma.protocal.delete({
+      where: { id },
+    });
+    return 'success';
+  }
 }
