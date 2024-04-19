@@ -12,12 +12,12 @@ export class ProtocalService {
     merchantId: number,
     { pagination: { current, pageSize }, category }: GetProtocalDto,
   ) {
-    const where: Prisma.ProtocalWhereInput = {
+    const where: Prisma.ProtocolWhereInput = {
       merchantId,
       ...formateCategory(category),
     };
     const [data, total] = await Promise.all([
-      this.prisma.protocal.findMany({
+      this.prisma.protocol.findMany({
         where,
         skip: (current - 1) * pageSize,
         take: +pageSize,
@@ -26,7 +26,7 @@ export class ProtocalService {
           creator: true,
         },
       }),
-      this.prisma.protocal.count({
+      this.prisma.protocol.count({
         where,
       }),
     ]);
@@ -40,13 +40,13 @@ export class ProtocalService {
   }
 
   async findOne(id: number) {
-    return await this.prisma.protocal.findUniqueOrThrow({
+    return await this.prisma.protocol.findUniqueOrThrow({
       where: { id },
     });
   }
 
   async deleteOne(id: number) {
-    await this.prisma.protocal.delete({
+    await this.prisma.protocol.delete({
       where: { id },
     });
     return 'success';

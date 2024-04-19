@@ -1,4 +1,9 @@
-export const formateFilter = ({ creator, status }) => {
+import { Prisma } from '@prisma/client';
+
+export const formateFilter = ({
+  creator,
+  status,
+}): Prisma.NetworkWhereInput[] => {
   const resultFilter = [];
   if (creator) {
     const { quantifier, content = [] } = creator;
@@ -25,7 +30,9 @@ export const formateFilter = ({ creator, status }) => {
   return resultFilter;
 };
 
-export const formateSearchKey = (searchKey: string) =>
+export const formateSearchKey = (
+  searchKey: string,
+): Prisma.NetworkWhereInput =>
   searchKey
     ? {
         OR: ['name', 'createAt', 'lastEdit'].map((name) => ({
@@ -33,3 +40,25 @@ export const formateSearchKey = (searchKey: string) =>
         })),
       }
     : {};
+
+export const formateOptions = (optionKeys: string): Prisma.NetworkSelect =>
+  optionKeys
+    ? JSON.parse(optionKeys || '[]').reduce(
+        (acc: Record<string, boolean>, currentValue: string) => {
+          acc[currentValue] = true;
+          return acc;
+        },
+        {},
+      )
+    : {
+        status: true,
+        createAt: true,
+        creator: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        lastEdit: true,
+        protocol: true,
+      };

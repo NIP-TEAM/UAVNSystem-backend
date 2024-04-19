@@ -1,4 +1,4 @@
-import { IsObject, IsString } from 'class-validator';
+import { IsObject, IsOptional, IsString } from 'class-validator';
 import { BasicPagination } from 'src/utils/types';
 
 export class GetNetworkDto {
@@ -7,4 +7,8 @@ export class GetNetworkDto {
 
   @IsString()
   filter: string;
+
+  @IsOptional()
+  @IsString()
+  selectKeys: string;
 }

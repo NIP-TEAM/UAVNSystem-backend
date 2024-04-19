@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { GetNetworkDto } from '../network/dto/get-network.dto';
 import { Prisma } from '@prisma/client';
 import { CreateUavDto } from './dto/create-uav.dto';
 import { formateFilter, formateSearchKey } from './utils';
+import { GetUavDto } from './dto/get-uav.dto';
 
 @Injectable()
 export class PlaneService {
@@ -28,7 +28,7 @@ export class PlaneService {
 
   async findAll(
     merchantId: number,
-    { pagination: { current, pageSize }, filter }: GetNetworkDto,
+    { pagination: { current, pageSize }, filter }: GetUavDto,
   ) {
     const {
       searchKey = '',

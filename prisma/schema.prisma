@@ -17,7 +17,7 @@ model UserInfo {
   merchantId Int        @default(1)
   networks   Network[]
   Uav        Uav[]
-  Protocal   Protocal[]
+  Protocal   Protocol[]
 
   @@index([email])
 }
@@ -32,7 +32,7 @@ model Network {
   lastEdit   String    @db.VarChar(255)
   uavs       Uav[]
   merchantId Int
-  Protocal   Protocal? @relation(fields: [protocalId], references: [id])
+  protocol   Protocol? @relation(fields: [protocalId], references: [id])
   protocalId Int?
   connectMap Json?
 }
@@ -57,7 +57,7 @@ model VerifyCode {
   createTime String
 }
 
-model Protocal {
+model Protocol {
   id        Int       @id @default(autoincrement())
   name      String    @db.VarChar(255)
   type      String    @db.VarChar(255)
