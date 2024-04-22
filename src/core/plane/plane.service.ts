@@ -77,7 +77,7 @@ export class PlaneService {
   }
 
   async deleteMany(ids: number[]) {
-    await Promise.all(ids.map((id) => this.deleteOne(+id)));
+    await this.prisma.uav.deleteMany({ where: { id: { in: ids } } });
     return 'success';
   }
 }

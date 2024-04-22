@@ -80,17 +80,25 @@ export class NetworkService {
   }
 
   async findOne(id: number) {
-    const { uavs, ...restField } = await this.prisma.network.findUniqueOrThrow({
+    const {
+      _count: { uavs: uavCount = 0 },
+      ...rest
+    } = await this.prisma.network.findUniqueOrThrow({
       where: { id },
-      include: {
+      select: {
         creator: true,
         uavs: true,
+        _count: {
+          select: { uavs: true },
+        },
       },
     });
 
     return {
-      ...restField,
-      uavsCount: uavs?.length || 0,
+      data: {
+        ...rest,
+        uavCount,
+      },
     };
   }
 
@@ -106,14 +114,10 @@ export class NetworkService {
   }
 
   async remove({ ids }: RemoveNetworkDto) {
-    await Promise.all(
-      ids.map((id) =>
-        Promise.all([
-          this.prisma.network.delete({ where: { id } }),
-          this.prisma.uav.deleteMany({ where: { networkId: id } }),
-        ]),
-      ),
-    );
+    await Promise.all([
+      this.prisma.network.deleteMany({ where: { id: { in: ids } } }),
+      this.prisma.uav.deleteMany({ where: { id: { in: ids } } }),
+    ]);
     return 'success';
   }
 }
