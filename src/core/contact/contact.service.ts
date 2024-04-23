@@ -62,4 +62,23 @@ export class ContactService {
       },
     };
   }
+
+  async findOne(id: number) {
+    return await this.prisma.contactList.findUniqueOrThrow({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        creator: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        networkInfo: true,
+        createAt: true,
+        updateAt: true,
+      },
+    });
+  }
 }

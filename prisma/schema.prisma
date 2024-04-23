@@ -95,6 +95,6 @@ model ContactList {
   createAt    String    @db.VarChar(255)
   updateAt    String    @db.VarChar(255)
   networkInfo Network[]
-  contactInfo     Contact[]
+  contactInfo Contact[]
   merchantId  Int
 }

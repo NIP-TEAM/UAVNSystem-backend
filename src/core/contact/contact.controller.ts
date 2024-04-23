@@ -1,4 +1,4 @@
-import { Controller, Get, Query, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Query, Req, UseGuards } from '@nestjs/common';
 import { ContactService } from './contact.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { GetContactListDto } from './dto/get-contact.dto';
@@ -12,5 +12,11 @@ export class ContactController {
   @Get()
   findAll(@Req() req: JwtAuthReq, @Query() data: GetContactListDto) {
     return this.contactService.findAll(req.user.tenant.merchantId, data);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get(':id')
+  findOne(@Param('id') id: number) {
+    return this.contactService.findOne(+id);
   }
 }
