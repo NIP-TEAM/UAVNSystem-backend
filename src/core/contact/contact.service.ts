@@ -78,6 +78,7 @@ export class ContactService {
         networkInfo: true,
         createAt: true,
         updateAt: true,
+        contactInfo: true,
       },
     });
   }
