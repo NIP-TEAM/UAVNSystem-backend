@@ -17,9 +17,16 @@ import { VerifyCodeService } from './core/verify-code/verify-code.service';
 import { EmailService } from './core/email/email.service';
 import { NetworkModule } from './core/network/network.module';
 import { EntityModule } from './core/entity/entity.module';
+import { ContactController } from './core/contact/contact.controller';
+import { ContactService } from './core/contact/contact.service';
 
 @Module({
-  controllers: [AppController, TenantsController, VerifyCodeController],
+  controllers: [
+    AppController,
+    TenantsController,
+    VerifyCodeController,
+    ContactController,
+  ],
   providers: [
     AppService,
     TenantsService,
@@ -28,6 +35,7 @@ import { EntityModule } from './core/entity/entity.module';
     UserService,
     VerifyCodeService,
     EmailService,
+    ContactService,
   ],
   imports: [
     PlaneModule,

@@ -8,33 +8,37 @@ datasource db {
 }
 
 model UserInfo {
-  id         Int        @id @default(autoincrement())
-  password   String
-  name       String
-  active     Boolean
-  lastLogin  String
-  email      String
-  merchantId Int        @default(1)
-  networks   Network[]
-  Uav        Uav[]
-  Protocal   Protocol[]
+  id          Int           @id @default(autoincrement())
+  password    String
+  name        String
+  active      Boolean
+  lastLogin   String
+  email       String
+  merchantId  Int           @default(1)
+  networks    Network[]
+  Uav         Uav[]
+  Protocal    Protocol[]
+  Contact     Contact[]
+  ContactList ContactList[]
 
   @@index([email])
 }
 
 model Network {
-  id         Int       @id @default(autoincrement())
-  name       String    @db.VarChar(255)
-  status     Int       @default(1)
-  createAt   String    @db.VarChar(255)
-  creator    UserInfo  @relation(fields: [creatorId], references: [id])
-  creatorId  Int
-  lastEdit   String    @db.VarChar(255)
-  uavs       Uav[]
-  merchantId Int
-  protocol   Protocol? @relation(fields: [protocalId], references: [id])
-  protocalId Int?
-  connectMap Json?
+  id            Int          @id @default(autoincrement())
+  name          String       @db.VarChar(255)
+  status        Int          @default(1)
+  createAt      String       @db.VarChar(255)
+  creator       UserInfo     @relation(fields: [creatorId], references: [id])
+  creatorId     Int
+  lastEdit      String       @db.VarChar(255)
+  uavs          Uav[]
+  merchantId    Int
+  protocol      Protocol?    @relation(fields: [protocalId], references: [id])
+  protocalId    Int?
+  connectMap    Json?
+  ContactList   ContactList? @relation(fields: [contactListId], references: [id])
+  contactListId Int?
 }
 
 model Uav {
@@ -58,15 +62,39 @@ model VerifyCode {
 }
 
 model Protocol {
-  id        Int       @id @default(autoincrement())
-  name      String    @db.VarChar(255)
-  type      String    @db.VarChar(255)
-  networks  Network[]
-  createAt  String
-  updateAt  String
-  creator   UserInfo  @relation(fields: [creatorId], references: [id])
-  creatorId Int
-  feature   Json
+  id         Int       @id @default(autoincrement())
+  name       String    @db.VarChar(255)
+  type       String    @db.VarChar(255)
+  networks   Network[]
+  createAt   String
+  updateAt   String
+  creator    UserInfo  @relation(fields: [creatorId], references: [id])
+  creatorId  Int
+  feature    Json
   merchantId Int
 }
 
+model Contact {
+  id            Int          @id @default(autoincrement())
+  name          String       @db.VarChar(255)
+  phone         String       @db.VarChar(255)
+  email         String       @db.VarChar(255)
+  creator       UserInfo     @relation(fields: [creatorId], references: [id])
+  creatorId     Int
+  createAt      String       @db.VarChar(255)
+  updateAt      String       @db.VarChar(255)
+  ContactList   ContactList? @relation(fields: [contactListId], references: [id])
+  contactListId Int?
+}
+
+model ContactList {
+  id          Int       @id @default(autoincrement())
+  name        String
+  creator     UserInfo  @relation(fields: [creatorId], references: [id])
+  creatorId   Int
+  createAt    String    @db.VarChar(255)
+  updateAt    String    @db.VarChar(255)
+  networkInfo Network[]
+  contactInfo     Contact[]
+  merchantId  Int
+}
