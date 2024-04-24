@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { GetContactListDto } from './dto/get-contact.dto';
 import { Prisma } from '@prisma/client';
-import { formateFilter, formateOptions, formateSearchKey } from './utils';
+import { formateSearchKey } from './utils';
 
 @Injectable()
 export class ContactService {
@@ -10,23 +10,14 @@ export class ContactService {
 
   async findAll(
     merchantId: number,
-    {
-      pagination: { current, pageSize },
-      filter,
-      selectKeys,
-    }: GetContactListDto,
+    { searchKey = '', creatorId = 0 }: GetContactListDto,
   ) {
-    const {
-      searchKey = '',
-      filters = {},
-      sorter = {},
-    } = JSON.parse(filter || '{}');
     const where: Prisma.ContactListWhereInput = {
       AND: [
         {
           merchantId,
         },
-        ...(formateFilter(filters) as Prisma.ContactListWhereInput[]),
+        { ...(creatorId ? { creatorId } : {}) },
         formateSearchKey(searchKey) as Prisma.ContactListWhereInput,
       ],
     };
@@ -36,17 +27,8 @@ export class ContactService {
         select: {
           id: true,
           name: true,
-          _count: {
-            select: {
-              networkInfo: true,
-              contactInfo: true,
-            },
-          },
-          ...formateOptions(selectKeys),
+          contactInfo: true,
         },
-        skip: (current - 1) * pageSize,
-        take: +pageSize,
-        orderBy: sorter,
       }),
       this.prisma.contactList.count({
         where,
@@ -75,10 +57,14 @@ export class ContactService {
             name: true,
           },
         },
-        networkInfo: true,
         createAt: true,
         updateAt: true,
-        contactInfo: true,
+        networkInfo: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
       },
     });
   }

@@ -1,14 +1,10 @@
-import { IsObject, IsOptional, IsString } from 'class-validator';
-import { BasicPagination } from 'src/utils/types';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class GetContactListDto {
-  @IsObject()
-  pagination: BasicPagination;
-
-  @IsString()
-  filter: string;
-
+  @IsNumber()
+  @IsOptional()
+  creatorId: number;
   @IsOptional()
   @IsString()
-  selectKeys: string;
+  searchKey: string;
 }
