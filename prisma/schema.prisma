@@ -75,16 +75,16 @@ model Protocol {
 }
 
 model Contact {
-  id            Int          @id @default(autoincrement())
-  name          String       @db.VarChar(255)
-  phone         String       @db.VarChar(255)
-  email         String       @db.VarChar(255)
-  creator       UserInfo     @relation(fields: [creatorId], references: [id])
-  creatorId     Int
-  createAt      String       @db.VarChar(255)
-  updateAt      String       @db.VarChar(255)
-  ContactList   ContactList? @relation(fields: [contactListId], references: [id])
-  contactListId Int?
+  id             Int      @id @default(autoincrement())
+  name           String   @db.VarChar(255)
+  phone          String   @db.VarChar(255)
+  email          String   @db.VarChar(255)
+  creator        UserInfo @relation(fields: [creatorId], references: [id])
+  creatorId      Int
+  createAt       String   @db.VarChar(255)
+  updateAt       String   @db.VarChar(255)
+  contactListIds Int[]
+  merchantId     Int
 }
 
 model ContactList {
@@ -95,6 +95,5 @@ model ContactList {
   createAt    String    @db.VarChar(255)
   updateAt    String    @db.VarChar(255)
   networkInfo Network[]
-  contactInfo Contact[]
   merchantId  Int
 }
