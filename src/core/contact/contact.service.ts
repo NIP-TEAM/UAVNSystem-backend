@@ -12,8 +12,10 @@ import {
 export class ContactService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAllContactList(merchantId: number, { filters }: GetContactListDto) {
-    const { creatorId = 0, searchKey = '' } = JSON.parse(filters || '{}');
+  async findAllContactList(
+    merchantId: number,
+    { creatorId = 0, searchKey = '' }: GetContactListDto,
+  ) {
     const where: Prisma.ContactListWhereInput = {
       AND: [
         {

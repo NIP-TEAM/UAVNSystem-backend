@@ -2,8 +2,10 @@ import { IsNumber, IsObject, IsOptional, IsString } from 'class-validator';
 import { BasicPagination } from 'src/utils/types';
 
 export class GetContactListDto {
+  @IsNumber()
+  creatorId: number;
   @IsString()
-  filters: '';
+  searchKey: string;
 }
 
 export class GetContactDto {
