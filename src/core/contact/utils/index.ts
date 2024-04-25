@@ -25,7 +25,7 @@ export const formateContactListId = (contactListId: number) => {
   }
 };
 
-export const formateFilter = ({ creator }): Prisma.NetworkWhereInput[] => {
+export const formateFilter = ({ creator }): Prisma.ContactWhereInput[] => {
   const resultFilter = [];
   if (creator) {
     const { quantifier, content = [] } = creator;
