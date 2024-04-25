@@ -14,14 +14,18 @@ export class ContactService {
 
   async findAllContactList(
     merchantId: number,
-    { creatorId = 0, searchKey = '' }: GetContactListDto,
+    { creatorIds = '', searchKey = '' }: GetContactListDto,
   ) {
     const where: Prisma.ContactListWhereInput = {
       AND: [
         {
           merchantId,
         },
-        { ...(creatorId ? { creatorId } : {}) },
+        {
+          OR: JSON.parse(creatorIds || '[]').map((creatorId: number) => ({
+            creatorId,
+          })),
+        },
         formateSearchKey(searchKey) as Prisma.ContactListWhereInput,
       ],
     };
