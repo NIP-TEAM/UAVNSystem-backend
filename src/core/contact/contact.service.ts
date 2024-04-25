@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { GetContactDto, GetContactListDto } from './dto/get-contact.dto';
+import { GetContactDto } from './dto/get-contact.dto';
 import { Prisma } from '@prisma/client';
 import {
   formateContactListId,
+  formateFilter,
   formateOptions,
   formateSearchKey,
 } from './utils';
@@ -12,25 +13,11 @@ import {
 export class ContactService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAllContactList(
-    merchantId: number,
-    { creatorIds = '', searchKey = '' }: GetContactListDto,
-  ) {
-    const where: Prisma.ContactListWhereInput = {
-      AND: [
-        {
-          merchantId,
-        },
-        {
-          OR: JSON.parse(creatorIds || '[]').map((creatorId: number) => ({
-            creatorId,
-          })),
-        },
-        formateSearchKey(searchKey) as Prisma.ContactListWhereInput,
-      ],
-    };
+  async findAllContactList(merchantId: number) {
     const data = await this.prisma.contactList.findMany({
-      where,
+      where: {
+        merchantId,
+      },
       select: {
         id: true,
         name: true,
@@ -69,20 +56,19 @@ export class ContactService {
   async findAllContact(
     merchantId: number,
     contactListId: number,
-    {
-      pagination: { pageSize, current },
-      searchKey = '',
-      selectKeys = '',
-      creator = 0,
-      sorter = {},
-    }: GetContactDto,
+    { pagination: { current, pageSize }, filter, selectKeys }: GetContactDto,
   ) {
+    const {
+      searchKey = '',
+      filters = {},
+      sorter = {},
+    } = JSON.parse(filter || '{}');
     const where: Prisma.ContactWhereInput = {
       AND: [
         {
           merchantId,
-          ...(creator ? { creatorId: creator } : {}),
         },
+        ...(formateFilter(filters) as Prisma.ContactWhereInput[]),
         formateSearchKey(searchKey) as Prisma.ContactWhereInput,
         formateContactListId(contactListId) as Prisma.ContactWhereInput,
       ],

@@ -25,6 +25,23 @@ export const formateContactListId = (contactListId: number) => {
   }
 };
 
+export const formateFilter = ({ creator }): Prisma.NetworkWhereInput[] => {
+  const resultFilter = [];
+  if (creator) {
+    const { quantifier, content = [] } = creator;
+    if (quantifier === 'is')
+      resultFilter.push({
+        OR: content.map((item: number) => ({ userInfoId: item })),
+      });
+    else if (quantifier === 'isNot')
+      resultFilter.push({
+        AND: content.map((item: number) => ({ userInfoId: { not: item } })),
+      });
+  }
+
+  return resultFilter;
+};
+
 export const formateSearchKey = (
   searchKey: string,
 ): Prisma.ContactListWhereInput =>
