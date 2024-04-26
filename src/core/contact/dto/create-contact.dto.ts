@@ -1,6 +1,6 @@
 import { IsString } from 'class-validator';
 
-export class CreateNetworkDto {
+export class CreateContactListDto {
   @IsString()
   name: string;
 }

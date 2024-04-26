@@ -1,8 +1,18 @@
-import { Controller, Get, Param, Query, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { ContactService } from './contact.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { GetContactDto } from './dto/get-contact.dto';
 import { JwtAuthReq } from 'src/utils/types';
+import { CreateContactListDto } from './dto/create-contact.dto';
 
 @Controller('contact')
 export class ContactController {
@@ -32,5 +42,14 @@ export class ContactController {
       id,
       dataController,
     );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post()
+  createContactList(
+    @Req() req: JwtAuthReq,
+    @Body() data: CreateContactListDto,
+  ) {
+    return this.contactService.createNewContactList(req.user.tenant, data);
   }
 }

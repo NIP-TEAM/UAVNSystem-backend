@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { GetContactDto } from './dto/get-contact.dto';
 import { Prisma } from '@prisma/client';
@@ -8,6 +8,8 @@ import {
   formateOptions,
   formateSearchKey,
 } from './utils';
+import { JwtAuthReq } from 'src/utils/types';
+import { CreateContactListDto } from './dto/create-contact.dto';
 
 @Injectable()
 export class ContactService {
@@ -98,5 +100,30 @@ export class ContactService {
         },
       },
     };
+  }
+
+  async createNewContactList(
+    { merchantId, id: creatorId }: JwtAuthReq['user']['tenant'],
+    { name }: CreateContactListDto,
+  ) {
+    const check = await this.prisma.contactList.findFirst({ where: { name } });
+    if (check)
+      throw new BadRequestException(
+        JSON.stringify({
+          en: 'This contact list is existed!',
+          zh: '联系组名字不可用',
+        }),
+      );
+    const { id } = await this.prisma.contactList.create({
+      data: {
+        merchantId,
+        name,
+        createAt: new Date().getTime().toString(),
+        creatorId,
+        updateAt: new Date().getTime().toString(),
+      },
+    });
+
+    return { id };
   }
 }
