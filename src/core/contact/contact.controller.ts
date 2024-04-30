@@ -22,19 +22,19 @@ export class ContactController {
   constructor(private readonly contactService: ContactService) {}
 
   @UseGuards(JwtAuthGuard)
-  @Get()
+  @Get('contactlist')
   findAllContactList(@Req() req: JwtAuthReq) {
     return this.contactService.findAllContactList(req.user.tenant.merchantId);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('detail/:id')
+  @Get('contactlist/info/:id')
   findOneContactList(@Param('id') id: number) {
     return this.contactService.findOneContactList(+id);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get(':id')
+  @Get('contactlist/:id')
   findAllContact(
     @Req() req: JwtAuthReq,
     @Param('id') id: number,
@@ -48,7 +48,7 @@ export class ContactController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post()
+  @Post('contactlist')
   createContactList(
     @Req() req: JwtAuthReq,
     @Body() data: CreateContactListDto,
@@ -57,7 +57,7 @@ export class ContactController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('contacts')
+  @Post()
   createContacts(@Req() req: JwtAuthReq, @Body() data: CreateContactDto[]) {
     return this.contactService.createNewContacts(req.user.tenant, data);
   }

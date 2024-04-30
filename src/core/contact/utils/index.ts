@@ -2,18 +2,11 @@ import { Prisma } from '@prisma/client';
 
 export const formateContactListId = (contactListId: number) => {
   switch (contactListId) {
-    case -2:
-      return {};
     case -1:
+      return {};
+    case -2:
       return {
-        OR: [
-          {
-            contactListIds: { isEmpty: true },
-          },
-          {
-            contactListIds: { equals: [] },
-          },
-        ],
+        contactListIds: { equals: [] },
       };
 
     default:

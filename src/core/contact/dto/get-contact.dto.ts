@@ -1,14 +1,7 @@
 import { IsObject, IsOptional, IsString } from 'class-validator';
 import { BasicPagination } from 'src/utils/types';
 
-// export class GetContactListDto {
-//   @IsOptional()
-//   @IsString()
-//   creatorIds: string;
-//   @IsOptional()
-//   @IsString()
-//   searchKey: string;
-// }
+export class GetContactListDto {}
 
 export class GetContactDto {
   @IsObject()
