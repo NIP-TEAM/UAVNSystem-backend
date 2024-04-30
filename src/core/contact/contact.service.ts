@@ -13,6 +13,7 @@ import {
   CreateContactDto,
   CreateContactListDto,
 } from './dto/create-contact.dto';
+import { UpdateContactListDto } from './dto/update-contact.dto';
 
 @Injectable()
 export class ContactService {
@@ -127,6 +128,17 @@ export class ContactService {
       },
     });
 
+    return 'success';
+  }
+
+  async updateContactListInfo(id: number, data: UpdateContactListDto) {
+    await this.prisma.contactList.update({
+      where: { id },
+      data: {
+        ...data,
+        updateAt: new Date().getTime().toLocaleString(),
+      },
+    });
     return 'success';
   }
 

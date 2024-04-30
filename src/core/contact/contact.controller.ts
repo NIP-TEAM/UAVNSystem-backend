@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  Patch,
   Post,
   Query,
   Req,
@@ -16,6 +17,7 @@ import {
   CreateContactDto,
   CreateContactListDto,
 } from './dto/create-contact.dto';
+import { UpdateContactListDto } from './dto/update-contact.dto';
 
 @Controller('contact')
 export class ContactController {
@@ -31,6 +33,15 @@ export class ContactController {
   @Get('contactlist/info/:id')
   findOneContactList(@Param('id') id: number) {
     return this.contactService.findOneContactList(+id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch('contactlist/:id')
+  updateOneContactListInfo(
+    @Param('id') id: number,
+    @Body() data: UpdateContactListDto,
+  ) {
+    return this.contactService.updateContactListInfo(id, data);
   }
 
   @UseGuards(JwtAuthGuard)
