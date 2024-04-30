@@ -12,7 +12,10 @@ import { ContactService } from './contact.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { GetContactDto } from './dto/get-contact.dto';
 import { JwtAuthReq } from 'src/utils/types';
-import { CreateContactListDto } from './dto/create-contact.dto';
+import {
+  CreateContactDto,
+  CreateContactListDto,
+} from './dto/create-contact.dto';
 
 @Controller('contact')
 export class ContactController {
@@ -51,5 +54,11 @@ export class ContactController {
     @Body() data: CreateContactListDto,
   ) {
     return this.contactService.createNewContactList(req.user.tenant, data);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('contacts')
+  createContacts(@Req() req: JwtAuthReq, @Body() data: CreateContactDto[]) {
+    return this.contactService.createNewContacts(req.user.tenant, data);
   }
 }

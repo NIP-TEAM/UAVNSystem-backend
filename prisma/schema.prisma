@@ -77,13 +77,14 @@ model Protocol {
 model Contact {
   id             Int      @id @default(autoincrement())
   name           String   @db.VarChar(255)
-  phone          String   @db.VarChar(255)
+  phone          String?  @db.VarChar(255)
   email          String   @db.VarChar(255)
   creator        UserInfo @relation(fields: [creatorId], references: [id])
   creatorId      Int
   createAt       String   @db.VarChar(255)
   updateAt       String   @db.VarChar(255)
   contactListIds Int[]
+  note           String?   @db.VarChar(255)
   merchantId     Int
 }
 

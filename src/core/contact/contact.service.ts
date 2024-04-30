@@ -9,7 +9,10 @@ import {
   formateSearchKey,
 } from './utils';
 import { JwtAuthReq } from 'src/utils/types';
-import { CreateContactListDto } from './dto/create-contact.dto';
+import {
+  CreateContactDto,
+  CreateContactListDto,
+} from './dto/create-contact.dto';
 
 @Injectable()
 export class ContactService {
@@ -114,7 +117,7 @@ export class ContactService {
           zh: '联系组名字不可用',
         }),
       );
-    const { id } = await this.prisma.contactList.create({
+    await this.prisma.contactList.create({
       data: {
         merchantId,
         name,
@@ -124,6 +127,31 @@ export class ContactService {
       },
     });
 
-    return { id };
+    return 'success';
+  }
+
+  async createNewContacts(
+    { merchantId, id: creatorId }: JwtAuthReq['user']['tenant'],
+    contacts: CreateContactDto[],
+  ) {
+    await this.prisma.contact.createMany({
+      data: contacts.map(
+        ({
+          name = `New contact ${new Date().getTime()}`,
+          contactListIds = [],
+          ...restField
+        }) => ({
+          name,
+          contactListIds,
+          creatorId,
+          merchantId,
+          createAt: new Date().getTime().toString(),
+          updateAt: new Date().getTime().toString(),
+          ...restField,
+        }),
+      ),
+    });
+
+    return 'success';
   }
 }
