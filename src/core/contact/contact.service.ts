@@ -13,11 +13,34 @@ import {
   CreateContactDto,
   CreateContactListDto,
 } from './dto/create-contact.dto';
-import { UpdateContactListDto } from './dto/update-contact.dto';
+import {
+  UpdateContactDto,
+  UpdateContactListDto,
+} from './dto/update-contact.dto';
 
 @Injectable()
 export class ContactService {
   constructor(private readonly prisma: PrismaService) {}
+
+  async findContactDetail(id: number) {
+    const data = await this.prisma.contact.findUniqueOrThrow({
+      where: {
+        id,
+      },
+      include: {
+        creator: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+
+    return {
+      data,
+    };
+  }
 
   async findAllContactList(merchantId: number) {
     const data = await this.prisma.contactList.findMany({
@@ -133,6 +156,17 @@ export class ContactService {
 
   async updateContactListInfo(id: number, data: UpdateContactListDto) {
     await this.prisma.contactList.update({
+      where: { id },
+      data: {
+        ...data,
+        updateAt: new Date().getTime().toLocaleString(),
+      },
+    });
+    return 'success';
+  }
+
+  async updateContactInfo(id: number, data: UpdateContactDto) {
+    await this.prisma.contact.update({
       where: { id },
       data: {
         ...data,

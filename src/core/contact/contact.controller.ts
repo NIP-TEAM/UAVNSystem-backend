@@ -17,11 +17,26 @@ import {
   CreateContactDto,
   CreateContactListDto,
 } from './dto/create-contact.dto';
-import { UpdateContactListDto } from './dto/update-contact.dto';
+import {
+  UpdateContactDto,
+  UpdateContactListDto,
+} from './dto/update-contact.dto';
 
 @Controller('contact')
 export class ContactController {
   constructor(private readonly contactService: ContactService) {}
+
+  @UseGuards(JwtAuthGuard)
+  @Get('info/:id')
+  findContactDetail(@Param('id') id: number) {
+    return this.contactService.findContactDetail(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('info/:id')
+  updateContactDetail(@Param('id') id: number, data: UpdateContactDto) {
+    return this.contactService.updateContactInfo(id, data);
+  }
 
   @UseGuards(JwtAuthGuard)
   @Get('contactlist')
