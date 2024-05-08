@@ -18,17 +18,31 @@ export const formateContactListId = (contactListId: number) => {
   }
 };
 
-export const formateFilter = ({ creator }): Prisma.ContactWhereInput[] => {
+export const formateFilter = ({
+  creator,
+  phone,
+}): Prisma.ContactWhereInput[] => {
   const resultFilter = [];
   if (creator) {
     const { quantifier, content = [] } = creator;
     if (quantifier === 'is')
       resultFilter.push({
-        OR: content.map((item: number) => ({ userInfoId: item })),
+        OR: content.map((item: number) => ({ creatorId: item })),
       });
     else if (quantifier === 'isNot')
       resultFilter.push({
-        AND: content.map((item: number) => ({ userInfoId: { not: item } })),
+        AND: content.map((item: number) => ({ creatorId: { not: item } })),
+      });
+  }
+  if (phone) {
+    const { quantifier } = phone;
+    if (quantifier === 'is')
+      resultFilter.push({
+        OR: [{ phone: null }, { phone: '' }],
+      });
+    else if (quantifier === 'isNot')
+      resultFilter.push({
+        AND: [{ phone: { not: null } }, { phone: { not: '' } }],
       });
   }
 
