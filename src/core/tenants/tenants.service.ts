@@ -70,6 +70,7 @@ export class TenantsService {
         name,
       });
     }
+    return 'success';
   }
 
   async sendPassword({ email, verifyCode }: ForgetUserDto) {

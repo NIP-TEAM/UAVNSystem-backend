@@ -3,13 +3,18 @@ import { LoginUserDto } from './login-user.dto';
 import { IsString, IsBoolean, IsOptional } from 'class-validator';
 
 export class UpdateUserDto extends PartialType(LoginUserDto) {
-  @IsString()
   @IsOptional()
+  @IsString()
   @ApiProperty()
   lastLogin?: string;
 
-  @IsBoolean()
   @IsOptional()
+  @IsBoolean()
   @ApiProperty()
   active?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  @ApiProperty()
+  name?: string;
 }

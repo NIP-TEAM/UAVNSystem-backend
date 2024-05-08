@@ -19,6 +19,7 @@ import { NetworkModule } from './core/network/network.module';
 import { EntityModule } from './core/entity/entity.module';
 import { ContactController } from './core/contact/contact.controller';
 import { ContactService } from './core/contact/contact.service';
+import { UserController } from './user/user.controller';
 
 @Module({
   controllers: [
@@ -26,6 +27,7 @@ import { ContactService } from './core/contact/contact.service';
     TenantsController,
     VerifyCodeController,
     ContactController,
+    UserController,
   ],
   providers: [
     AppService,
