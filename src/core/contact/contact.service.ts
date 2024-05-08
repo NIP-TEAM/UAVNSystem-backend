@@ -170,7 +170,7 @@ export class ContactService {
       where: { id },
       data: {
         ...data,
-        updateAt: new Date().getTime().toLocaleString(),
+        updateAt: new Date().getTime().toString(),
       },
     });
     return 'success';

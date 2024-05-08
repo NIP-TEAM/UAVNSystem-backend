@@ -33,8 +33,8 @@ export class ContactController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('info/:id')
-  updateContactDetail(@Param('id') id: number, data: UpdateContactDto) {
+  @Patch('info/:id')
+  updateContactDetail(@Param('id') id: number, @Body() data: UpdateContactDto) {
     return this.contactService.updateContactInfo(id, data);
   }
 

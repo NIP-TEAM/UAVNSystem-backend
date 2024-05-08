@@ -57,6 +57,8 @@ export const formateOptions = (optionKeys: string): Prisma.ContactSelect =>
       )
     : {
         createAt: true,
+        email: true,
+        phone: true,
         creator: {
           select: {
             id: true,
