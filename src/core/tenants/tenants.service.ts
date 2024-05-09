@@ -102,4 +102,9 @@ export class TenantsService {
     }
     return 'success';
   }
+
+  async logout(id: number) {
+    await this.userService.updateOne(id, { active: false });
+    return 'success';
+  }
 }

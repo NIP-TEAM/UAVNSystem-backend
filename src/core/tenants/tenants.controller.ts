@@ -39,6 +39,12 @@ export class TenantsController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('logout')
+  logout(@Req() req: JwtAuthReq) {
+    return this.tenantsService.logout(req.user.tenant.id);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.tenantsService.findOne(+id);
