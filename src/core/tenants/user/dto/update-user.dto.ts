@@ -14,7 +14,7 @@ export class UpdateUserDto extends PartialType(LoginUserDto) {
   active?: boolean;
 
   @IsOptional()
-  @IsBoolean()
+  @IsString()
   @ApiProperty()
   name?: string;
 }
