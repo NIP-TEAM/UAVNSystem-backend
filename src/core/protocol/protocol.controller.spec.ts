@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ProtocalController } from './protocal.controller';
+import { ProtocalController } from './protocol.controller';
 
-describe('ProtocalController', () => {
+describe('ProtocolController', () => {
   let controller: ProtocalController;
 
   beforeEach(async () => {

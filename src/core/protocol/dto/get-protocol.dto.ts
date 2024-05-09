@@ -3,7 +3,7 @@ import { BasicPagination } from 'src/utils/types';
 
 export type CategoryType = 'defualt' | 'costmer';
 
-export class GetProtocalDto {
+export class GetProtocolDto {
   @IsObject()
   pagination: BasicPagination;
 

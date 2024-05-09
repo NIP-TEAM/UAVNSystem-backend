@@ -7,18 +7,18 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { ProtocalService } from './protocal.service';
+import { ProtocolService } from './protocol.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { JwtAuthReq } from 'src/utils/types';
-import { GetProtocalDto } from './dto/get-protocal.dto';
+import { GetProtocolDto } from './dto/get-protocol.dto';
 
 @Controller('protocal')
 export class ProtocalController {
-  constructor(private readonly protocalService: ProtocalService) {}
+  constructor(private readonly protocalService: ProtocolService) {}
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  findAll(@Req() req: JwtAuthReq, @Query() dataController: GetProtocalDto) {
+  findAll(@Req() req: JwtAuthReq, @Query() dataController: GetProtocolDto) {
     return this.protocalService.findAll(req.user.tenant.id, dataController);
   }
 

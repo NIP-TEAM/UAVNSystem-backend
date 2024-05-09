@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { GetProtocalDto } from './dto/get-protocal.dto';
+import { GetProtocolDto } from './dto/get-protocol.dto';
 import { formateCategory } from './utils';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
-export class ProtocalService {
+export class ProtocolService {
   constructor(private readonly prisma: PrismaService) {}
 
   async findAll(
     merchantId: number,
-    { pagination: { current, pageSize }, category }: GetProtocalDto,
+    { pagination: { current, pageSize }, category }: GetProtocolDto,
   ) {
     const where: Prisma.ProtocolWhereInput = {
       merchantId,
