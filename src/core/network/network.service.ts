@@ -88,6 +88,7 @@ export class NetworkService {
       select: {
         creator: true,
         uavs: true,
+        connectMap: true,
         _count: {
           select: { uavs: true },
         },
