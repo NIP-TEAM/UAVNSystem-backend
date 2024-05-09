@@ -6,6 +6,7 @@ import {
   Param,
   UseGuards,
   Req,
+  Patch,
 } from '@nestjs/common';
 import { TenantsService } from './tenants.service';
 import { AuthService } from '../auth/auth.service';
@@ -16,6 +17,7 @@ import { JwtAuthReq } from 'src/utils/types';
 import { ForgetUserDto } from './user/dto/forget-user.dto';
 import { LoginUserDto } from './user/dto/login-user.dto';
 import { RegisterUserDto } from './user/dto/register-user.dto';
+import { UpdateUserDto } from './user/dto/update-user.dto';
 
 @Controller('tenants')
 export class TenantsController {
@@ -36,15 +38,17 @@ export class TenantsController {
     return this.tenantsService.findAll(req.user.tenant.merchantId);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.tenantsService.findOne(+id);
   }
 
-  //   @Patch(':id')
-  //   update(@Param('id') id: string, @Body() updateTenantDto: UpdateTenantDto) {
-  //     return this.tenantsService.update(+id, updateTenantDto);
-  //   }
+  @UseGuards(JwtAuthGuard)
+  @Patch()
+  update(@Req() req: JwtAuthReq, @Body() data: UpdateUserDto) {
+    return this.tenantsService.updateOne(req.user.tenant.id, data);
+  }
 
   //   @Delete(':id')
   //   remove(@Param('id') id: string) {
@@ -54,6 +58,7 @@ export class TenantsController {
   login(@Body() { email, password }: LoginUserDto) {
     return this.authService.login(email, password);
   }
+
   @Post('register')
   register(@Body() registerInfo: RegisterUserDto) {
     return this.tenantsService.register(registerInfo);

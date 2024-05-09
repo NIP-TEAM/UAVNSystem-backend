@@ -11,6 +11,7 @@ import { Subject } from '../email/config';
 import { ForgetUserDto } from './user/dto/forget-user.dto';
 import { RegisterUserDto } from './user/dto/register-user.dto';
 import { UserService } from './user/user.service';
+import { UpdateUserDto } from './user/dto/update-user.dto';
 
 @Injectable()
 export class TenantsService {
@@ -27,6 +28,10 @@ export class TenantsService {
 
   findOne(id: number) {
     return this.userService.findOneById(id);
+  }
+
+  updateOne(id: number, data: UpdateUserDto) {
+    return this.userService.updateOne(id, data);
   }
 
   private generateRandomPassword() {
