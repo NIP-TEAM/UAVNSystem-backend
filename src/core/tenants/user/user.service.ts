@@ -26,7 +26,7 @@ export class UserService {
   }
 
   async updateOne(id: number, { password, ...restData }: UpdateUserDto) {
-    await this.prisma.userInfo.update({
+    const result = await this.prisma.userInfo.update({
       where: { id },
       data: {
         ...(password
@@ -37,7 +37,7 @@ export class UserService {
         ...restData,
       },
     });
-    return 'success';
+    return result;
   }
 
   async createOne(data: CreateUserDto) {
