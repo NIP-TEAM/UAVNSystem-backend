@@ -6,11 +6,11 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { getHashPassword } from 'src/utils/utils';
 import { VerifyCodeService } from '../verify-code/verify-code.service';
-import { UserService } from '../user/user.service';
-import { RegisterUserDto } from '../user/dto/register-user.dto';
-import { ForgetUserDto } from '../user/dto/forget-user.dto';
 import { EmailService } from '../email/email.service';
 import { Subject } from '../email/config';
+import { ForgetUserDto } from './user/dto/forget-user.dto';
+import { RegisterUserDto } from './user/dto/register-user.dto';
+import { UserService } from './user/user.service';
 
 @Injectable()
 export class TenantsService {

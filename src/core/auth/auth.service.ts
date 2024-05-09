@@ -4,9 +4,10 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { AuthEntity } from 'src/core/user/entities/auth.entity';
-import { UserService } from 'src/core/user/user.service';
+
 import { hashIsEqual } from 'src/utils/utils';
+import { AuthEntity } from '../tenants/user/entities/auth.entity';
+import { UserService } from '../tenants/user/user.service';
 
 @Injectable()
 export class AuthService {
