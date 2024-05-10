@@ -34,8 +34,8 @@ export class TenantsController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  findAll(@Req() req: JwtAuthReq, @Body() data?: { take: number }) {
-    return this.tenantsService.findAll(req.user.tenant.merchantId, data);
+  findAll(@Req() req: JwtAuthReq) {
+    return this.tenantsService.findAll(req.user.tenant.merchantId);
   }
 
   @UseGuards(JwtAuthGuard)

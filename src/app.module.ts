@@ -8,6 +8,7 @@ import { NetworkModule } from './core/network/network.module';
 import { EntityModule } from './core/entity/entity.module';
 import { ContactModule } from './core/contact/contact.module';
 import { ProtocolModule } from './core/protocol/protocol.module';
+import { DashboardModule } from './core/dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { ProtocolModule } from './core/protocol/protocol.module';
     ProtocolModule,
     TenantsModule,
     VerifyCodeModule,
+    DashboardModule,
   ],
 })
 export class AppModule {}

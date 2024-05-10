@@ -8,18 +8,13 @@ import { getHashPassword } from 'src/utils/utils';
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAll(merchantId: number, controllData?: { take: number }) {
-    const { take = undefined } = controllData;
+  async findAll(merchantId: number) {
     const data = await this.prisma.userInfo.findMany({
       where: { merchantId },
       select: {
         name: true,
         id: true,
-        lastLogin: true,
-        active: true,
-        email: true,
       },
-      take,
     });
     return {
       data,
