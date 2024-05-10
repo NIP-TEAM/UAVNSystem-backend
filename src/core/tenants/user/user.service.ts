@@ -8,13 +8,22 @@ import { getHashPassword } from 'src/utils/utils';
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAll(merchantId: number) {
-    return (await this.prisma.userInfo.findMany({ where: { merchantId } })).map(
-      ({ name, id }) => ({
-        name,
-        id,
-      }),
-    );
+  async findAll(merchantId: number, controllData?: { take: number }) {
+    const { take = undefined } = controllData;
+    const data = await this.prisma.userInfo.findMany({
+      where: { merchantId },
+      select: {
+        name: true,
+        id: true,
+        lastLogin: true,
+        active: true,
+        email: true,
+      },
+      take,
+    });
+    return {
+      data,
+    };
   }
 
   async findOneByEmail(email: string) {
