@@ -138,7 +138,7 @@ export class ContactService {
       throw new BadRequestException(
         JSON.stringify({
           en: 'This contact list is existed!',
-          zh: '联系组名字不可用',
+          zh: '联系组名字重复!',
         }),
       );
     await this.prisma.contactList.create({

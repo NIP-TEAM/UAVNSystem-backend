@@ -20,6 +20,7 @@ model UserInfo {
   Protocal    Protocol[]
   Contact     Contact[]
   ContactList ContactList[]
+  Email       Email[]
 
   @@index([email])
 }
@@ -39,6 +40,7 @@ model Network {
   connectMap    Json?
   ContactList   ContactList? @relation(fields: [contactListId], references: [id])
   contactListId Int?
+  Email         Email[]
 }
 
 model Uav {
@@ -70,7 +72,7 @@ model Protocol {
   updateAt   String
   creator    UserInfo  @relation(fields: [creatorId], references: [id])
   creatorId  Int
-  feature    Json
+  script     String
   merchantId Int
 }
 
@@ -84,17 +86,31 @@ model Contact {
   createAt       String   @db.VarChar(255)
   updateAt       String   @db.VarChar(255)
   contactListIds Int[]
-  note           String?   @db.VarChar(255)
+  note           String?  @db.VarChar(255)
   merchantId     Int
 }
 
 model ContactList {
   id          Int       @id @default(autoincrement())
-  name        String
+  name        String    @unique
   creator     UserInfo  @relation(fields: [creatorId], references: [id])
   creatorId   Int
   createAt    String    @db.VarChar(255)
   updateAt    String    @db.VarChar(255)
   networkInfo Network[]
   merchantId  Int
+}
+
+model Email {
+  id          Int      @id @default(autoincrement())
+  name        String
+  creator     UserInfo @relation(fields: [creatorId], references: [id])
+  creatorId   Int
+  conditions   Json
+  network     Network  @relation(fields: [networkId], references: [id])
+  networkId   Int
+  contactIds  Int[]
+  merchantId  Int
+  createAt    String
+  updateAt    String
 }

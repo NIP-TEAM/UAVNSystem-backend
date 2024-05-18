@@ -7,13 +7,17 @@ export class DashboardService {
   constructor(private readonly prisma: PrismaService) {}
 
   async getOverviewData(merchantId: number) {
-    const countDataPromises = [
+    const countKeyData: ReadonlyArray<string> = [
       'uav',
       'network',
       'userInfo',
       'protocol',
+      'email',
       'contact',
-    ].map((item) => this.prisma[item].count({ where: { merchantId } }));
+    ];
+    const countDataPromises = countKeyData.map((item) =>
+      this.prisma[item].count({ where: { merchantId } }),
+    );
     const creatorsPromise = this.prisma.userInfo.findMany({
       where: { merchantId },
       take: 3,
@@ -46,11 +50,7 @@ export class DashboardService {
       take: 8,
     });
 
-    const [
-      [uavCount, networkCount, creatorCount, protocolCount, contactCount],
-      creators,
-      networkStructures,
-    ] = await Promise.all([
+    const [countResult, creators, networkStructures] = await Promise.all([
       Promise.all(countDataPromises),
       creatorsPromise,
       networkStructuresPromise,
@@ -58,13 +58,10 @@ export class DashboardService {
 
     return {
       data: {
-        countData: {
-          uavCount,
-          networkCount,
-          creatorCount,
-          protocolCount,
-          contactCount,
-        },
+        countData: countKeyData.reduce((prev, current, index) => {
+          prev[current + 'Count'] = countResult?.[index] || 0;
+          return prev;
+        }, {}),
         creators,
         networkStructures,
       },
