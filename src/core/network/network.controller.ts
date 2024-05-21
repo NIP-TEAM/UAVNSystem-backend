@@ -25,7 +25,7 @@ export class NetworkController {
   @UseGuards(JwtAuthGuard)
   @Post()
   create(@Req() req: JwtAuthReq, @Body() createNetworkDto: CreateNetworkDto) {
-    return this.networkService.create(req.user.tenant.id, createNetworkDto);
+    return this.networkService.create(req.user.tenant, createNetworkDto);
   }
 
   @UseGuards(JwtAuthGuard)

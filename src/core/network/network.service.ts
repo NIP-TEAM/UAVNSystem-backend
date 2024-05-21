@@ -6,23 +6,23 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { GetNetworkDto } from './dto/get-network.dto';
 import { RemoveNetworkDto } from './dto/remove-network.dto';
 import { formateFilter, formateOptions, formateSearchKey } from './utils';
+import { JwtAuthReq } from 'src/utils/types';
 
 @Injectable()
 export class NetworkService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(userInfoId: number, createNetworkDto: CreateNetworkDto) {
-    const userInfo = await this.prisma.userInfo.findUniqueOrThrow({
-      where: { id: userInfoId },
-    });
-    const { merchantId, id } = userInfo;
+  async create(
+    { id: creatorId, merchantId }: JwtAuthReq['user']['tenant'],
+    createNetworkDto: CreateNetworkDto,
+  ) {
     await this.prisma.network.create({
       data: {
         ...createNetworkDto,
         createAt: new Date().getTime().toString(),
         lastEdit: new Date().getTime().toString(),
         merchantId,
-        creatorId: id,
+        creatorId,
       },
     });
     return 'success';

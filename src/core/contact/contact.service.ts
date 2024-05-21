@@ -200,4 +200,17 @@ export class ContactService {
 
     return 'success';
   }
+
+  async findManyContact(merchantId: number, ids: string) {
+    const idsArray = JSON.parse(ids || '[]');
+    const data = await this.prisma.contact.findMany({
+      where: {
+        merchantId,
+        id: { in: idsArray },
+      },
+    });
+    return {
+      data,
+    };
+  }
 }

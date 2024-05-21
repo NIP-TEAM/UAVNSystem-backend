@@ -27,6 +27,12 @@ export class ContactController {
   constructor(private readonly contactService: ContactService) {}
 
   @UseGuards(JwtAuthGuard)
+  @Get('infos')
+  findContacts(@Req() req: JwtAuthReq, @Query() ids: string) {
+    return this.contactService.findManyContact(req.user.tenant.merchantId, ids);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get('info/:id')
   findContactDetail(@Param('id') id: number) {
     return this.contactService.findContactDetail(id);

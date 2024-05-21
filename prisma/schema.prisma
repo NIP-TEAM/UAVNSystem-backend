@@ -102,15 +102,16 @@ model ContactList {
 }
 
 model Email {
-  id          Int      @id @default(autoincrement())
-  name        String
-  creator     UserInfo @relation(fields: [creatorId], references: [id])
-  creatorId   Int
-  conditions   Json
-  network     Network  @relation(fields: [networkId], references: [id])
-  networkId   Int
-  contactIds  Int[]
-  merchantId  Int
-  createAt    String
-  updateAt    String
+  id         Int      @id @default(autoincrement())
+  name       String
+  creator    UserInfo @relation(fields: [creatorId], references: [id])
+  creatorId  Int
+  conditions Json
+  network    Network  @relation(fields: [networkId], references: [id])
+  networkId  Int
+  contactIds Int[]
+  merchantId Int
+  createAt   String
+  updateAt   String
+  onSchedule Boolean  @default(false)
 }
