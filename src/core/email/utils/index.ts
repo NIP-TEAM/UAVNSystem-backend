@@ -1,4 +1,5 @@
 import { Prisma } from '@prisma/client';
+import * as ping from 'ping';
 
 export const formateFilter = ({
   creator,
@@ -59,3 +60,30 @@ export const formateSearchKey = (searchKey: string): Prisma.EmailWhereInput =>
 //           },
 //         },
 //       };
+
+export const compareResult = (
+  quantifier: number,
+  target: number,
+  value: number,
+) => {
+  switch (quantifier) {
+    case 1:
+      return value < target;
+    case 2:
+      return value === target;
+    case 3:
+      return value > target;
+
+    default:
+      return false;
+  }
+};
+
+export const excutePingIp = async (ip: string | undefined) => {
+  if (!ip) return false;
+  try {
+    return (await ping.promise.probe(ip, { timeout: 10 })).alive;
+  } catch {
+    return false;
+  }
+};

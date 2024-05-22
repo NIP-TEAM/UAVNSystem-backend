@@ -7,4 +7,7 @@ export class CreateUavDto {
 
   @IsNumber()
   networkId: number;
+
+  @IsString()
+  mac: string;
 }

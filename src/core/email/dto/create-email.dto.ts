@@ -8,7 +8,7 @@ export class CreateEmailDto {
   contactIds: number[];
 
   @IsArray()
-  conditions: { [key: string]: number }[];
+  condition: { [key: string]: number }[];
 
   @IsNumber()
   networkId: number;

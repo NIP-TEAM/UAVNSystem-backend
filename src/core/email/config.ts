@@ -27,4 +27,5 @@ export const EMAILCONFIG: MailerOptions = {
 export enum Subject {
   VerifyCode = '验证码邮件 Verification Code Email',
   ForgetPassword = '找回密码邮件 Password Recovery Email',
+  NetworkError = '自组网络状态异常 Uavs network State Error',
 }

@@ -1,0 +1,25 @@
+<html lang='en'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <title>Your Password</title>
+  </head>
+  <body>
+    <h1><strong>UAVN System</strong></h1>
+    <div class='article'>
+      <h2>自组网状态异常</h2>
+      <p>亲爱的 {{name}}: </p>
+      <p>识别码为: <strong>{{networkId}}</strong>的网络状态异常</p>
+      <p>您可以点击以下链接跳转: {{urlContent}}</p>
+    </div>
+    <div class='article'>
+      <h2>Network State Error</h2>
+      <p>Dear {{name}},</p>
+      <p>Your Uav network ided <strong>{{networkId}}</strong> error</p>
+      <p>You could check out by clicking the url below! {{urlContent}}</p>
+    </div>
+  </body>
+  <style>
+    .article { margin: 3rem 0; }
+  </style>
+</html>

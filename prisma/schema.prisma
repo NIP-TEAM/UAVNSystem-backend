@@ -55,6 +55,7 @@ model Uav {
   createAt      String   @db.VarChar(255)
   creatorInfo   UserInfo @relation(fields: [creatorId], references: [id])
   creatorId     Int
+  mac           String
 }
 
 model VerifyCode {
@@ -106,7 +107,7 @@ model Email {
   name       String
   creator    UserInfo @relation(fields: [creatorId], references: [id])
   creatorId  Int
-  conditions Json
+  condition  Json
   network    Network  @relation(fields: [networkId], references: [id])
   networkId  Int
   contactIds Int[]

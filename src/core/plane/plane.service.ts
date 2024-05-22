@@ -11,7 +11,7 @@ export class PlaneService {
 
   async create(merchantId: number, creatorId: number, uavs: CreateUavDto[]) {
     await Promise.all(
-      uavs.map(({ name, networkId }, index) =>
+      uavs.map(({ name, networkId, mac }, index) =>
         this.prisma.uav.create({
           data: {
             name: name || `network${networkId}uav${index}`,
@@ -19,6 +19,7 @@ export class PlaneService {
             networkId,
             merchantId,
             creatorId,
+            mac,
           },
         }),
       ),
