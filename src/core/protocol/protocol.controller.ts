@@ -12,7 +12,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { JwtAuthReq } from 'src/utils/types';
 import { GetProtocolDto } from './dto/get-protocol.dto';
 
-@Controller('protocal')
+@Controller('protocol')
 export class ProtocalController {
   constructor(private readonly protocalService: ProtocolService) {}
 

@@ -1,4 +1,4 @@
-import { IsObject, IsString } from 'class-validator';
+import { IsObject, IsOptional, IsString } from 'class-validator';
 import { BasicPagination } from 'src/utils/types';
 
 export class GetProtocolDto {
@@ -6,5 +6,9 @@ export class GetProtocolDto {
   pagination: BasicPagination;
 
   @IsString()
-  category: number;
+  filter: string;
+
+  @IsOptional()
+  @IsString()
+  selectKeys: string;
 }
