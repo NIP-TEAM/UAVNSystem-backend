@@ -67,14 +67,14 @@ model VerifyCode {
 model Protocol {
   id         Int       @id @default(autoincrement())
   name       String    @db.VarChar(255)
-  type       String    @db.VarChar(255)
+  isDefault  Boolean   @default(false)
   networks   Network[]
   createAt   String
   updateAt   String
-  creator    UserInfo  @relation(fields: [creatorId], references: [id])
-  creatorId  Int
+  creator    UserInfo?  @relation(fields: [creatorId], references: [id])
+  creatorId  Int?
   script     String
-  merchantId Int
+  merchantId Int?
 }
 
 model Contact {
