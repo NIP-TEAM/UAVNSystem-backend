@@ -16,6 +16,7 @@ export class EmailScheduleService {
 
   @Interval(10000)
   async handleCron() {
+    this.logger.log('moniting ...');
     const allEmail = await this.prisma.email.findMany({
       where: { onSchedule: { equals: true } },
       include: {
