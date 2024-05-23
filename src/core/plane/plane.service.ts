@@ -4,10 +4,11 @@ import { Prisma } from '@prisma/client';
 import { CreateUavDto } from './dto/create-uav.dto';
 import { formateFilter, formateSearchKey } from './utils';
 import { GetUavDto } from './dto/get-uav.dto';
+import { ProtocolService } from '../protocol/protocol.service';
 
 @Injectable()
 export class PlaneService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService, private readonly protocolService: ProtocolService) { }
 
   async create(merchantId: number, creatorId: number, uavs: CreateUavDto[]) {
     await Promise.all(
@@ -24,6 +25,13 @@ export class PlaneService {
         }),
       ),
     );
+
+    const networksId = Array.from(new Set(uavs.map(({ networkId }) => networkId)))
+
+    await Promise.all(
+      networksId.map(id => this.protocolService.runScript(id))
+    )
+
     return 'success';
   }
 

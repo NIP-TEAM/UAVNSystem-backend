@@ -4,7 +4,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class DashboardService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   async getOverviewData(merchantId: number) {
     const countKeyData: ReadonlyArray<string> = [
@@ -16,7 +16,7 @@ export class DashboardService {
       'contact',
     ];
     const countDataPromises = countKeyData.map((item) =>
-      this.prisma[item].count({ where: { merchantId } }),
+      this.prisma[item].count({ where: { OR: [{ merchantId }, (item === 'protocol' ? { isDefault: true } : {})] } }),
     );
     const creatorsPromise = this.prisma.userInfo.findMany({
       where: { merchantId },

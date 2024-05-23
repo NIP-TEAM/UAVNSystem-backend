@@ -35,8 +35,8 @@ model Network {
   lastEdit      String       @db.VarChar(255)
   uavs          Uav[]
   merchantId    Int
-  protocol      Protocol?    @relation(fields: [protocalId], references: [id])
-  protocalId    Int?
+  protocol      Protocol    @relation(fields: [protocolId], references: [id])
+  protocolId    Int
   connectMap    Json?
   ContactList   ContactList? @relation(fields: [contactListId], references: [id])
   contactListId Int?

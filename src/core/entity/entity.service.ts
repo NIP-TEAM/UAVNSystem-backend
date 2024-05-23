@@ -6,7 +6,7 @@ export class EntityService {
     return maps.map((item) => ({
       map: item,
       speed: (Math.random() * 10).toFixed(2),
-      status: Math.random() > 0.3 ? true : false,
+      status: Math.random() > 0.1 ? true : false,
     }));
   }
 }

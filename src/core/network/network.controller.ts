@@ -44,8 +44,8 @@ export class NetworkController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateNetworkDto: UpdateNetworkDto) {
-    return this.networkService.update(+id, updateNetworkDto);
+  updateOne(@Param('id') id: string, @Body() updateNetworkDto: UpdateNetworkDto) {
+    return this.networkService.updateOne(+id, updateNetworkDto);
   }
 
   @UseGuards(JwtAuthGuard)

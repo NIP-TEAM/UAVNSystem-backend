@@ -7,5 +7,6 @@ import { PrismaModule } from 'src/prisma/prisma.module';
   imports: [PrismaModule],
   controllers: [ProtocalController],
   providers: [ProtocolService],
+  exports: [ProtocolService]
 })
-export class ProtocolModule {}
+export class ProtocolModule { }

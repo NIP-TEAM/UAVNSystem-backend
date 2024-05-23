@@ -7,10 +7,11 @@ import { GetNetworkDto } from './dto/get-network.dto';
 import { RemoveNetworkDto } from './dto/remove-network.dto';
 import { formateFilter, formateOptions, formateSearchKey } from './utils';
 import { JwtAuthReq } from 'src/utils/types';
+import { ProtocolService } from '../protocol/protocol.service';
 
 @Injectable()
 export class NetworkService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService, private readonly protocolService: ProtocolService) { }
 
   async create(
     { id: creatorId, merchantId }: JwtAuthReq['user']['tenant'],
@@ -86,9 +87,19 @@ export class NetworkService {
     } = await this.prisma.network.findUniqueOrThrow({
       where: { id },
       select: {
-        creator: true,
+        id: true,
+        name: true,
+        creator: {
+          select: {
+            id: true,
+            name: true
+          }
+        },
         uavs: true,
+        protocol: { select: { name: true, id: true } },
         connectMap: true,
+        createAt: true,
+        status: true,
         _count: {
           select: { uavs: true },
         },
@@ -103,7 +114,7 @@ export class NetworkService {
     };
   }
 
-  async update(id: number, updateNetworkDto: UpdateNetworkDto) {
+  async updateOne(id: number, updateNetworkDto: UpdateNetworkDto) {
     await this.prisma.network.update({
       where: { id },
       data: {
@@ -111,6 +122,9 @@ export class NetworkService {
         lastEdit: new Date().getTime().toString(),
       },
     });
+    const { protocolId } = updateNetworkDto;
+    if (protocolId) await this.protocolService.runScript(id)
+  
     return 'success';
   }
 
