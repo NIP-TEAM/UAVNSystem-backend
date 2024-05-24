@@ -48,8 +48,6 @@ model Uav {
   name          String   @db.VarChar(255)
   networkInfo   Network  @relation(fields: [networkId], references: [id])
   networkId     Int
-  uploadSpeed   Float    @default(0.0)
-  downloadSpeed Float    @default(0.0)
   status        Int      @default(1)
   merchantId    Int
   createAt      String   @db.VarChar(255)
