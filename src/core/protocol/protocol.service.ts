@@ -7,9 +7,9 @@ import { shuffle } from 'lodash';
 
 @Injectable()
 export class ProtocolService {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
-  private readonly logger = new Logger(ProtocolService.name)
+  private readonly logger = new Logger(ProtocolService.name);
 
   async findAll(
     merchantId: number,
@@ -23,7 +23,7 @@ export class ProtocolService {
     const where: Prisma.ProtocolWhereInput = {
       AND: [
         {
-          OR: [{ merchantId, }, { isDefault: true }]
+          OR: [{ merchantId }, { isDefault: true }],
         },
         ...(formateFilter(filters) as Prisma.ProtocolWhereInput[]),
         formateSearchKey(searchKey) as Prisma.ProtocolWhereInput,
@@ -39,13 +39,13 @@ export class ProtocolService {
             select: {
               name: true,
               id: true,
-            }
+            },
           },
           creator: {
             select: {
               name: true,
               id: true,
-            }
+            },
           },
           updateAt: true,
           createAt: true,
@@ -62,8 +62,8 @@ export class ProtocolService {
 
     return {
       data,
-      pagination: { total }
-    }
+      pagination: { total },
+    };
   }
 
   async findOne(id: number) {
@@ -80,38 +80,51 @@ export class ProtocolService {
   }
 
   async runScript(id: number) {
-    const { uavs, protocol: { id: protocolId, name } } = await this.prisma.network.findUniqueOrThrow({
+    const {
+      uavs,
+      protocol: { id: protocolId, name },
+    } = await this.prisma.network.findUniqueOrThrow({
       where: { id },
       select: {
         uavs: true,
-        protocol: true
-      }
-    })
-    this.logger.log('change protocol to ' + name)
+        protocol: true,
+      },
+    });
+    this.logger.log('change protocol to ' + name);
 
-    const ids = [0, ...uavs.map(({ id }) => id)]
+    const ids = [0, ...uavs.map(({ id }) => id)];
 
-    const connectMap = []
+    const connectMap = [];
 
     ids.forEach((id: number) => {
-      const random1 = shuffle(ids.filter(item => item !== id))[0]
-      connectMap.push([id, random1])
+      const random1 = shuffle(ids.filter((item) => item !== id))[0];
+      if (!random1) return;
+      connectMap.push([id, random1]);
       if (id && Math.random() < 0.5) {
-        const random2 = shuffle(ids.filter(item => item !== id && item !== random1))[0]
-        connectMap.push([id, random2])
+        const random2 = shuffle(
+          ids.filter((item) => item !== id && item !== random1),
+        )[0];
+        if (!random2) return;
+        connectMap.push([id, random2]);
         if (Math.random() < 0.5) {
-          connectMap.push([id, shuffle(ids.filter(item => item !== id && item !== random1 && item !== random2))[0]])
+          const random3 = shuffle(
+            ids.filter(
+              (item) => item !== id && item !== random1 && item !== random2,
+            ),
+          )[0];
+          if (!random3) return;
+          connectMap.push([id, random3]);
         }
       }
-    })
+    });
 
     await this.prisma.network.update({
       where: { id },
       data: {
         connectMap,
         lastEdit: new Date().getTime().toString(),
-        status: 2
-      }
-    })
+        status: 2,
+      },
+    });
   }
 }
